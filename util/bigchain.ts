@@ -6,11 +6,20 @@ import type {
   } from 'bigchaindb-driver/types/transaction';
 
 class Bigchain{
-    conn:Connection;
+    private conn:Connection;
+    private static _instance:Bigchain;
 
     constructor(){
-        console.log("aa");
+        console.log("abc");
         this.conn = new Connection('https://test.ipdb.io/api/v1/')
+    }
+
+    static get instance() {
+        if(!this._instance){
+            console.log("def")
+            this._instance = new Bigchain();
+        }
+        return this._instance;
     }
 
     generateKeyPair():Ed25519Keypair{
@@ -65,12 +74,4 @@ class Bigchain{
 
 }
 
-let bigchainInstance: Bigchain
-const getBigchainInstance = () => {
-  if (!bigchainInstance) {
-    bigchainInstance = new Bigchain();
-  }
-  return bigchainInstance;
-};
-
-export const BigchainInstance = getBigchainInstance();
+export const BigchainInstance = Bigchain.instance;

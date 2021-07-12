@@ -14,6 +14,7 @@
     "@types/antd": "^1.0.0",
     "antd": "^4.16.3",
     "bigchaindb-driver": "^4.2.2",
+    "modern-react-qr-reader": "^1.0.12",
     "next": "11.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",

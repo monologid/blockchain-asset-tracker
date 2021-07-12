@@ -22,3 +22,7 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Others
+
+Reference for color branding [Green](https://colorhunt.co/palette/2f5d625e8b7ea7c4bcdfeeea)

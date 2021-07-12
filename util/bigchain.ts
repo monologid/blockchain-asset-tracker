@@ -1,64 +1,76 @@
-import * as driver from 'bigchaindb-driver'
+import {Ed25519Keypair,Connection,Transaction,ccJsonLoad,ccJsonify} from 'bigchaindb-driver'
+import { Endpoints, EndpointsResponse } from 'bigchaindb-driver/types/connection';
 import type {
+    TransactionCommon,
     TransactionOperations,
   } from 'bigchaindb-driver/types/transaction';
 
-export default class Bigchain{
-    conn: driver.Connection;
+class Bigchain{
+    conn:Connection;
 
     constructor(){
-        this.conn = new driver.Connection('https://test.ipdb.io/api/v1/')
+        console.log("aa");
+        this.conn = new Connection('https://test.ipdb.io/api/v1/')
     }
 
-    generateKeyPair():driver.Ed25519Keypair{
-        return new driver.Ed25519Keypair()
+    generateKeyPair():Ed25519Keypair{
+        return new Ed25519Keypair()
     }
    
-    createAsset(assetdata:any,metadata:any,publicKey:string,privateKey:string):Promise<any>{
-        const txCreate = driver.Transaction.makeCreateTransaction(
+    createAsset(assetdata:Record<string, any>,metadata:Record<string, any>,publicKey:string,privateKey:string):Promise<EndpointsResponse<TransactionOperations.CREATE,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+        const txCreate = Transaction.makeCreateTransaction(
             assetdata,
             metadata,
             [
-                driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(publicKey))
+                Transaction.makeOutput(Transaction.makeEd25519Condition(publicKey))
             ],
             publicKey
         )
-        
         const txCreateSigned =
-            driver.Transaction.signTransaction(txCreate, privateKey)
+            Transaction.signTransaction(txCreate, privateKey)
         return this.conn.postTransactionCommit(txCreateSigned)
     }
 
-    transferAsset(fetchedTx:any,metadata:any,privateKey:string,destinationPulicKey:string):Promise<any>{
-        const txTransfer = driver.Transaction.makeTransferTransaction(
+    transferAsset(fetchedTx:TransactionCommon,metadata:Record<string, any>,privateKey:string,destinationPulicKey:string):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+        const txTransfer = Transaction.makeTransferTransaction(
             [{ tx: fetchedTx, output_index: 0 }],
-            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(destinationPulicKey))],
+            [Transaction.makeOutput(Transaction.makeEd25519Condition(destinationPulicKey))],
             metadata
         )
 
-        const txTransferSigned= driver.Transaction.signTransaction(txTransfer, privateKey)
+        const txTransferSigned= Transaction.signTransaction(txTransfer, privateKey)
 
         return this.conn.postTransactionCommit(txTransferSigned)
     }
 
-    updateAssetRecord(fetchedTx:any,metadata:any,publicKey:string,privateKey:string):Promise<any>{
-        const txTransfer = driver.Transaction.makeTransferTransaction(
+    updateAssetRecord(fetchedTx:TransactionCommon,metadata:any,publicKey:string,privateKey:string):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+        const txTransfer = Transaction.makeTransferTransaction(
             [{ tx: fetchedTx, output_index: 0 }],
-            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(publicKey))],
+            [Transaction.makeOutput(Transaction.makeEd25519Condition(publicKey))],
             metadata
         )
 
-        const txTransferSigned= driver.Transaction.signTransaction(txTransfer, privateKey)
+        const txTransferSigned= Transaction.signTransaction(txTransfer, privateKey)
 
         return this.conn.postTransactionCommit(txTransferSigned)
     }
 
-    getTransactions(assetId:string,operation?:TransactionOperations):Promise<any>{
+    getTransactions(assetId:string,operation?:TransactionOperations): Promise<EndpointsResponse<typeof operation>[Endpoints.transactions]>{
         return this.conn.listTransactions(assetId,operation)
     }
 
-    detailTransaction(assetId:string):Promise<any>{
-        return this.conn.getTransaction(assetId)
+    detailTransaction(transactionId:string):Promise<EndpointsResponse<any>[Endpoints.transactionsDetail]>{
+        return this.conn.getTransaction(transactionId)
     }
 
 }
+
+let bigchainInstance: Bigchain
+const getBigchainInstance = () => {
+  if (!bigchainInstance) {
+    bigchainInstance = new Bigchain();
+  }
+  return bigchainInstance;
+};
+
+export const BigchainInstance = getBigchainInstance();

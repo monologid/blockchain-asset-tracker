@@ -47,11 +47,13 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
               isShow={isShowScanner}
               setIsShow={setIsShowScanner} />
 
-            <div className={`fixed bottom-0 right-0 p-8`}>
-              <button
-                className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}
-                onClick={e => setIsShowScanner(true)}>Scan</button>
-            </div>
+            {!isShowScanner &&
+              <div className={`fixed bottom-0 right-0 p-8`}>
+                <button
+                  className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}
+                  onClick={e => setIsShowScanner(true)}>Scan</button>
+              </div>
+            }
           </>
         )}
       </main>

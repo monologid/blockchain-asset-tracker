@@ -1,10 +1,8 @@
 import {FC, useState} from "react";
 import Head from "next/head";
 import Loading from "../icon/loader";
-import dynamic from "next/dynamic";
-import Scanner from "../scanner";
-// @ts-ignore
-const QrReader = dynamic(() => import('modern-react-qr-reader'), {ssr: false})
+import Scanner from "@/components/scanner";
+import { Drawer } from "antd";
 
 interface IMainLayoutProps {
   readonly title: string
@@ -12,9 +10,15 @@ interface IMainLayoutProps {
 }
 
 const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }) => {
+  const [isShowDrawer, setIsShowDrawer] = useState<boolean>(false)
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [isShowScanner, setIsShowScanner] = useState<boolean>(false)
   const onQRScan = (data: any) => {
-    if (data) alert(data)
+    if (data) {
+      setIsShowScanner(false)
+      alert(data)
+      setIsPageLoading(true)
+    }
   }
 
   const onQRError = (err: any) => {
@@ -26,7 +30,7 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
       <Head>{title}</Head>
 
       <main>
-        { isLoading ? (
+        { (isLoading || isPageLoading) ? (
           <div className={`w-full h-screen flex justify-center items-center`}>
             <Loading />
           </div>
@@ -35,28 +39,33 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
             <div className={`w-full flex justify-between items-center bg-primary-color text-white p-5`}>
               <div className={`font-bold uppercase`}>Blockchain Tracker</div>
               <div>
-                <i className={`fa fa-bars`} />
+                <i className={`fa fa-bars cursor-pointer`} onClick={e => setIsShowDrawer(true)}/>
               </div>
             </div>
+            <div className={`container-mobile mx-auto`}>
+              {!isShowScanner && children}
 
-            {children}
+              <Scanner
+                onQRError={onQRError}
+                onQRScan={onQRScan}
+                isShow={isShowScanner}
+                setIsShow={setIsShowScanner} />
 
-            <Scanner
-              onQRError={onQRError}
-              onQRScan={onQRScan}
-              isShow={isShowScanner}
-              setIsShow={setIsShowScanner} />
-
-            {!isShowScanner &&
-              <div className={`fixed bottom-0 right-0 p-8`}>
-                <button
-                  className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}
-                  onClick={e => setIsShowScanner(true)}>Scan</button>
-              </div>
-            }
+              {!isShowScanner &&
+                <div className={`fixed bottom-0 right-0 p-8`}>
+                  <button
+                    className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}
+                    onClick={e => setIsShowScanner(true)}>Scan</button>
+                </div>
+              }
+            </div>
           </>
         )}
       </main>
+
+      <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
+
+      </Drawer>
     </div>
   )
 }

@@ -14,7 +14,7 @@ interface IMainLayoutProps {
 const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }) => {
   const [isShowScanner, setIsShowScanner] = useState<boolean>(false)
   const onQRScan = (data: any) => {
-    alert(data)
+    if (data) alert(data)
   }
 
   const onQRError = (err: any) => {

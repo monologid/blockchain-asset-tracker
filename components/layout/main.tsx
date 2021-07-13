@@ -1,7 +1,8 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import Head from "next/head";
 import Loading from "../icon/loader";
 import dynamic from "next/dynamic";
+import Scanner from "../scanner";
 // @ts-ignore
 const QrReader = dynamic(() => import('modern-react-qr-reader'), {ssr: false})
 
@@ -11,6 +12,7 @@ interface IMainLayoutProps {
 }
 
 const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }) => {
+  const [isShowScanner, setIsShowScanner] = useState<boolean>(false)
   const onQRScan = (data: any) => {
     alert(data)
   }
@@ -19,7 +21,6 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
     alert(err)
   }
 
-  // @ts-ignore
   return (
     <div>
       <Head>{title}</Head>
@@ -40,10 +41,16 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
 
             {children}
 
-            <QrReader delay={300} onError={onQRError} onScan={onQRScan} style={{ width: '100%'}} />
+            <Scanner
+              onQRError={onQRError}
+              onQRScan={onQRScan}
+              isShow={isShowScanner}
+              setIsShow={setIsShowScanner} />
 
             <div className={`fixed bottom-0 right-0 p-8`}>
-              <div className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}>Scan</div>
+              <button
+                className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}
+                onClick={e => setIsShowScanner(true)}>Scan</button>
             </div>
           </>
         )}

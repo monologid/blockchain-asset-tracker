@@ -6,14 +6,17 @@ type Data = {
   name: string
 }
 
+import {DbConnection} from '../../util/database'
 
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  let keypair = BigchainInstance.generateKeyPair()
-  console.log({keypair})
+
+  const { db } = await DbConnection();
+
+
   res.status(200).json({ name: 'John Doe'})
   
 }

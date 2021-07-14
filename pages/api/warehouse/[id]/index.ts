@@ -17,7 +17,7 @@ export default async function handler(
 
   switch (req.method) {
     case "GET":
-      let result =  await db.collection("warehouse").findOne({_id:new ObjectId(id as string)}) || {}
+      let result =  await db.collection("warehouses").findOne({_id:new ObjectId(id as string)}) || {}
       res.status(200).json(result)
       break;
     default:

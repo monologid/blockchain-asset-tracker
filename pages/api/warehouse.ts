@@ -14,9 +14,10 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
 
-  const { db } = await DbConnection();
-
-
-  res.status(200).json({ name: 'John Doe'})
+  if (req.method === 'POST') {
+    return res.status(200).json({ name: 'create '})
+  } else {
+   return  res.status(200).json({ name: 'get'})
+  } 
   
 }

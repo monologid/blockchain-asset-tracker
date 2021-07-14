@@ -3,6 +3,7 @@ import Head from "next/head";
 import Loading from "../icon/loader";
 import Scanner from "@/components/scanner";
 import { Drawer } from "antd";
+import Link from "next/link";
 
 interface IMainLayoutProps {
   readonly title: string
@@ -64,10 +65,19 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
       </main>
 
       <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
-
+        <div className={`pt-10`}>
+          <MenuItem title={`Assets`} href={`/tank`} />
+          <MenuItem title={`Log Out`} href={`/`} />
+        </div>
       </Drawer>
     </div>
   )
 }
+
+const MenuItem = ({ title, href }: any) => (
+  <Link href={href}>
+    <div className={`cursor-pointer mb-2`}>{title}</div>
+  </Link>
+)
 
 export default MainLayout

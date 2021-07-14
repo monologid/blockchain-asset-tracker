@@ -1,7 +1,7 @@
 import Link from "next/link"
 
-const ButtonPrimary = ({ title }: any) => (
-  <button className={`bg-primary-color text-white p-2 px-5 rounded-full text-xs`} type={`submit`}>
+const ButtonPrimary = ({ title, className = '' }: any) => (
+  <button className={`bg-primary-color text-white p-2 px-5 rounded ${className}`} type={`submit`}>
     {title}
   </button>
 )

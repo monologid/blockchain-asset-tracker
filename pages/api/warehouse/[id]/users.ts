@@ -12,6 +12,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    return res.status(200).json({ name: 'id '})
+    return res.status(200).json({ name: 'id users'})
   
 }

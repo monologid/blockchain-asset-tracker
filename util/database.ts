@@ -7,17 +7,17 @@ const dbName = 'myProject'
 let cachedClient:MongoClient
 let cachedDb:Db 
 
-export async function DbConnection() {
+export async function DbConnection() :Promise<{
+  client: MongoClient;
+  db: Db;
+}> {
   if (cachedClient && cachedDb) {
     return { client: cachedClient, db: cachedDb }
   }
 
-  const client = await MongoClient.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  const client:MongoClient = await MongoClient.connect(uri)
 
-  const db = client.db(dbName)
+  const db:Db = client.db(dbName)
 
   cachedClient = client
   cachedDb = db

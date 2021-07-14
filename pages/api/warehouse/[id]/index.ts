@@ -1,15 +1,29 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-
-type Data = {
-  name: string
+import { Document,ObjectId} from 'mongodb'
+import {DbConnection} from '../../../../util/database'
+type Response = {
+  message: string
 }
 
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Response|Document|undefined>
 ) {
-    return res.status(200).json({ name: 'id '})
+   
+  const { db } = await DbConnection();
+  const { id } = req.query;
+
+  switch (req.method) {
+    case "GET":
+      let result =  await db.collection("warehouse").findOne({_id:new ObjectId(id as string)}) || {}
+      res.status(200).json(result)
+      break;
+    default:
+      res.status(404).json({ message: "Request HTTP Method Incorrect." })
+      break;
+  }
   
+
 }

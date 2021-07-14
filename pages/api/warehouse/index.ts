@@ -1,17 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-
-//import {BigchainInstance} from '../../../util/bigchain'
-
-
-// import {DbConnection} from '../../../util/database'
-
+import {DbConnection} from '../../../util/database'
 import Validator, { ValidationError } from "fastest-validator";
+import { Document} from 'mongodb'
 
 const v = new Validator();
 
-type Data = {
-  name: string
+type Response = {
+  message: string
 }
 
 interface Warehosue{
@@ -21,31 +17,41 @@ interface Warehosue{
   longitude: string
 }
 
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data|ValidationError[]>
+  res: NextApiResponse<Response|Document[]|ValidationError[]>
 ) {
 
-  if (req.method === 'POST') {
+  const { db } = await DbConnection();
 
-    const schema = {
-      name: { type: "string", min: 3, max: 100 },
-      description: { type: "string", min: 10, max: 255 },
-      latitude: "string", 
-      longitude: "string" 
-    };
+  switch (req.method) {
+    case "POST":
+      const schema = {
+        name: { type: "string", min: 3, max: 100 },
+        description: { type: "string", min: 10, max: 255 },
+        latitude: "string", 
+        longitude: "string" 
+      };
 
-    const check = v.compile(schema);
-    const warehosue = req.body as Warehosue
-    const result = check(warehosue);
+      const check = v.compile(schema);
+      const warehosue = req.body as Warehosue
+      const validateResult = check(warehosue);
 
-    if (Array.isArray(result)) {
-      return res.status(400).json(result)
-    }
-   
-    return res.status(200).json({ name: 'create '})
-  } else {
-   return  res.status(200).json({ name: 'get'})
-  } 
+      if (Array.isArray(validateResult)) {
+        return res.status(400).json(validateResult)
+      }
+
+      await db.collection("warehouses").insertOne(warehosue)
+      res.status(200).json({ message: 'success create warehouse '})
+      break;
+    case "GET":
+      let results =  await db.collection("warehouses").find({}).toArray()
+      res.status(200).json(results)
+      break;
+    default:
+      res.status(404).json({ message: "Request HTTP Method Incorrect." })
+      break;
+  }
   
 }

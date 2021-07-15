@@ -1,5 +1,5 @@
 # blockchain-asset-tracker
-Asset tracker using BigchainDB
+Asset tracker using  BigchainDB and Mongodb
 
 #### Login
 - Login using Google

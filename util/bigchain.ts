@@ -1,22 +1,21 @@
-import {Ed25519Keypair,Connection,Transaction,ccJsonLoad,ccJsonify} from 'bigchaindb-driver'
+import {Ed25519Keypair,Connection,Transaction} from 'bigchaindb-driver'
 import { Endpoints, EndpointsResponse } from 'bigchaindb-driver/types/connection';
 import type {
     TransactionCommon,
     TransactionOperations,
   } from 'bigchaindb-driver/types/transaction';
+import * as bip39 from 'bip39'
 
 class Bigchain{
     private conn:Connection;
     private static _instance:Bigchain;
 
     constructor(){
-        console.log("abc");
         this.conn = new Connection('https://test.ipdb.io/api/v1/')
     }
 
     static get instance() {
         if(!this._instance){
-            console.log("def")
             this._instance = new Bigchain();
         }
         return this._instance;
@@ -25,18 +24,28 @@ class Bigchain{
     generateKeyPair():Ed25519Keypair{
         return new Ed25519Keypair()
     }
+
+    async generateKeyPairFormPassphrase(passphrase:string):Promise<Ed25519Keypair>{
+     
+        const seed = await bip39.mnemonicToSeed(passphrase)
+        return new Ed25519Keypair(seed.slice(0,32))
+    }
    
-    createAsset(assetdata:Record<string, any>,metadata:Record<string, any>,publicKey:string,privateKey:string):Promise<EndpointsResponse<TransactionOperations.CREATE,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+   
+    createAsset(assetdata:Record<string, any>,metadata:Record<string, any>, keypair:Ed25519Keypair):Promise<EndpointsResponse<TransactionOperations.CREATE,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+  
         const txCreate = Transaction.makeCreateTransaction(
             assetdata,
             metadata,
             [
-                Transaction.makeOutput(Transaction.makeEd25519Condition(publicKey))
+                Transaction.makeOutput(Transaction.makeEd25519Condition(keypair.publicKey))
             ],
-            publicKey
+            keypair.publicKey
         )
+   
         const txCreateSigned =
-            Transaction.signTransaction(txCreate, privateKey)
+            Transaction.signTransaction(txCreate, keypair.privateKey)
+           
         return this.conn.postTransactionCommit(txCreateSigned)
     }
 

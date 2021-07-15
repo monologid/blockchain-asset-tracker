@@ -49,26 +49,26 @@ class Bigchain{
         return this.conn.postTransactionCommit(txCreateSigned)
     }
 
-    transferAsset(fetchedTx:TransactionCommon,metadata:Record<string, any>,privateKey:string,destinationPulicKey:string):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+    transferAsset(fetchedTx:TransactionCommon,metadata:Record<string, any>,keypair:Ed25519Keypair,destinationPulicKey:string):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
         const txTransfer = Transaction.makeTransferTransaction(
             [{ tx: fetchedTx, output_index: 0 }],
             [Transaction.makeOutput(Transaction.makeEd25519Condition(destinationPulicKey))],
             metadata
         )
 
-        const txTransferSigned= Transaction.signTransaction(txTransfer, privateKey)
+        const txTransferSigned= Transaction.signTransaction(txTransfer, keypair.privateKey)
 
         return this.conn.postTransactionCommit(txTransferSigned)
     }
 
-    updateAssetRecord(fetchedTx:TransactionCommon,metadata:any,publicKey:string,privateKey:string):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
+    updateAssetRecord(fetchedTx:TransactionCommon,metadata:any,keypair:Ed25519Keypair):Promise<EndpointsResponse<TransactionOperations.TRANSFER,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
         const txTransfer = Transaction.makeTransferTransaction(
             [{ tx: fetchedTx, output_index: 0 }],
-            [Transaction.makeOutput(Transaction.makeEd25519Condition(publicKey))],
+            [Transaction.makeOutput(Transaction.makeEd25519Condition(keypair.publicKey))],
             metadata
         )
 
-        const txTransferSigned= Transaction.signTransaction(txTransfer, privateKey)
+        const txTransferSigned= Transaction.signTransaction(txTransfer,keypair.privateKey)
 
         return this.conn.postTransactionCommit(txTransferSigned)
     }

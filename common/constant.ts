@@ -4,5 +4,7 @@ export default {
   GoogleTokenUrl: "https://oauth2.googleapis.com/token",
 
   FacebookGraphUrl: "https://graph.facebook.com/v4.0",
-  FacebookOauthUrl: "https://www.facebook.com/v4.0/dialog/oauth"
+  FacebookOauthUrl: "https://www.facebook.com/v4.0/dialog/oauth",
+
+  BaseApiUrl: process.env.BASE_API_URL || 'http://localhost:3000/api'
 }

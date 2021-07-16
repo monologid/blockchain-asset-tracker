@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  bigchaindb:
+    container_name: bigchaindb 
+    build:
+      context: bigchaindb
+      dockerfile: Dockerfile-all-in-one
+    command: bash ./pkg/scripts/all-in-one.bash
+    ports:
+      - "9984:9984"
+      - "9985:9985"
+      - "27017:27017"
+    restart: always
+  
+  apps:
+    build:
+      context: ./apps
+    ports:
+      - "3000:3000"
+    container_name: apps
+    stdin_open: true
+    volumes:
+        - ./apps:/usr/src/apps

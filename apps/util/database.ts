@@ -1,6 +1,6 @@
 import { MongoClient,Db } from 'mongodb';
 
-const uri = 'mongodb://localhost:27017'
+const uri = 'mongodb://bigchaindb:27017'
 const dbName = 'myProject'
 
 

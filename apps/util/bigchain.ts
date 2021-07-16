@@ -11,7 +11,7 @@ class Bigchain{
     private static _instance:Bigchain;
 
     constructor(){
-        this.conn = new Connection('https://test.ipdb.io/api/v1/')
+        this.conn = new Connection('http://bigchaindb:9984/api/v1/')
     }
 
     static get instance() {

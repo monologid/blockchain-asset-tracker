@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ObjectId} from 'mongodb'
-import {DbConnection} from '../../../../util/database'
-import {BigchainInstance} from '../../../../util/bigchain'
+import {DbConnection} from '@/util/database'
+import {BigchainInstance} from '@/util/bigchain'
 
 import Validator, { ValidationError } from "fastest-validator";
+import { wrapHandlerError } from '@/util/error';
 
 const v = new Validator();
 
@@ -15,7 +16,7 @@ type Response = {
 const passphrase = 'This is a random passphrase'
 
 
-export default async function handler(
+export default wrapHandlerError(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response|ValidationError[]>
 ) {
@@ -53,4 +54,4 @@ export default async function handler(
       res.status(404).json({ message: "Request HTTP Method Incorrect." })
       break;
   }
-}
+});

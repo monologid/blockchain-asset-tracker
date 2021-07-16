@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {DbConnection} from '../../../util/database'
+import {DbConnection} from '@/util/database'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
+import {wrapHandlerError} from '@/util/error';
 
 const v = new Validator();
 
@@ -18,7 +19,7 @@ interface Warehosue{
 }
 
 
-export default async function handler(
+export default wrapHandlerError(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response|Document[]|ValidationError[]>
 ) {
@@ -54,4 +55,4 @@ export default async function handler(
       break;
   }
   
-}
+});

@@ -1,13 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Document,ObjectId} from 'mongodb'
-import {DbConnection} from '../../../../util/database'
-import {BigchainInstance} from '../../../../util/bigchain'
+import {DbConnection} from '@/util/database'
+import {BigchainInstance} from '@/util/bigchain'
+import { wrapHandlerError } from '@/util/error'
 
 type Response = {
   message: string
 }
-export default async function handler(
+export default wrapHandlerError(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response|Document|undefined>
 ) {
@@ -27,4 +28,4 @@ export default async function handler(
     transactions:transactions
   })
 
-}
+});

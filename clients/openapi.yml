@@ -1,0 +1,139 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "API Documentation Asset Tracker"
+  termsOfService: "http://swagger.io/terms/"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3000"
+basePath: "/api"
+tags:
+- name: "warehouse"
+  description: "Warehouse API"
+- name: "asset"
+  description: "Asset API"
+schemes:
+- "https"
+- "http"
+paths:
+  /warehouse:
+    get:
+      tags:
+        - warehouse
+      description: List all warehouse
+      responses:
+        200:
+          description: success
+    post:
+      tags:
+        - warehouse
+      description: Create a warehouse
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              latitude:
+                type: string
+              longitude:
+                type: string
+      responses:
+        200:
+          description: success
+  /warehouse/{id}:
+    get:
+      tags:
+        - warehouse
+      description: Get warehouse detail
+      parameters:
+        - in: path
+          type: string
+          name: id
+          required: true
+      responses:
+        200:
+          description: success
+  /warehouse/{id}/users:
+    get:
+      tags:
+        - warehouse
+      description: Get all users in warehouse
+      parameters:
+        - in: path
+          type: string
+          name: id
+          required: true
+      responses:
+        200:
+          description: success
+    post:
+      tags:
+        - warehouse
+      description: Create a user warehouse
+      parameters:
+        - in: path
+          type: string
+          name: id
+          required: true
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              fullname:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+              phoneNo:
+                type: string
+      responses:
+        200:
+          description: success
+  
+  /asset:
+    post:
+      tags:
+        - asset
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              serialNumber:
+                type: string
+              manufacturer:
+                type: string
+              metadata:
+                type: object
+      responses:
+        200:
+          description: success
+  /asset/{id}/record:
+    post:
+      tags:
+        - asset
+      parameters:
+        - in: path
+          type: string
+          name: id
+          required: true
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              metadata:
+                type: object
+      responses:
+        200:
+          description: success
+    

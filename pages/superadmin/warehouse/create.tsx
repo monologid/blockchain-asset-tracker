@@ -3,7 +3,7 @@ import { Form, Input, Modal, Select } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { Api } from "clients/api-client";
 import { useRouter } from "next/dist/client/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LayoutSuperAdmin from "../_layout";
 import constant from "common/constant"
 
@@ -12,15 +12,15 @@ export default function SuperadminWarehouseCreatePage() {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [form] = Form.useForm()
   const onFinish = async (values: any) => {
-    setIsPageLoading(true)
     const api = new Api({ baseUrl: constant.BaseApiUrl })
     try {
+      setIsPageLoading(true)
       await api.warehouse.warehouseCreate(values)
       router.push('/superadmin/warehouse')
     } catch (e) {
+      setIsPageLoading(false)
       form.setFieldsValue(values)
       Modal.error({ title: 'Error', content: 'Something went wrong when creating new warehouse. Please try again later.'})
-      setIsPageLoading(false)
     }
   }
 

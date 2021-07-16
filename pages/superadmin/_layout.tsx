@@ -1,5 +1,5 @@
 import Loading from "@/components/icon/loader";
-import { Drawer, Menu } from "antd";
+import { Drawer } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { FC, useState } from "react";
@@ -38,7 +38,7 @@ const LayoutSuperAdmin: FC<ILayoutSuperAdminProps> = ({ title, isPageLoading, ch
       <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
         <div className={`mt-10`}>
           <MenuItem title={`Warehouse`} href={`warehouse`} />
-          <MenuItem title={`User Management`} href={`user`} />
+          {/* <MenuItem title={`User Management`} href={`user`} /> */}
         </div>
       </Drawer>
     </div>

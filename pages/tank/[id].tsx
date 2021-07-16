@@ -1,10 +1,13 @@
+import constant from "@/common/constant";
 import MainLayout from "@/components/layout/main";
-import { Timeline } from "antd";
+import { Modal, Timeline } from "antd";
+import { Api } from "clients/api-client";
 import moment from "moment";
 import { NextPageContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TankDetail({ id }: any) {
+  const api = new Api({ baseUrl: constant.BaseApiUrl })
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [tank, setTank] = useState<any>({
     id,
@@ -35,6 +38,22 @@ export default function TankDetail({ id }: any) {
       }
     ]
   })
+
+  const getAssetDetail = async (id: string) => {
+    try {
+      setIsPageLoading(true)
+      const result = await (await api.asset.assetDetail(id)).json()
+      setTank(result.assets)
+      setIsPageLoading(false)
+    } catch (e) {
+      setIsPageLoading(false)
+      Modal.error({ title: 'Error', content: 'Something went wrong when retrieving asset detail. Please try again later.'})
+    }
+  }
+
+  useEffect(() => {
+    getAssetDetail(id).then(null)
+  }, [])
 
   return (
     <MainLayout title={`Tank Detail`} isLoading={isPageLoading}>

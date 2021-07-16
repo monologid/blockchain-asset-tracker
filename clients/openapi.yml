@@ -97,8 +97,14 @@ paths:
       responses:
         200:
           description: success
-  
+
   /asset:
+    get:
+      tags:
+        - asset
+      responses:
+        200:
+          description: success
     post:
       tags:
         - asset
@@ -114,6 +120,13 @@ paths:
                 type: string
               metadata:
                 type: object
+      responses:
+        200:
+          description: success
+  /asset/{id}:
+    get:
+      tags:
+        - asset
       responses:
         200:
           description: success
@@ -136,4 +149,3 @@ paths:
       responses:
         200:
           description: success
-    

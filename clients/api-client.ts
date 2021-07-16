@@ -293,6 +293,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags asset
+     * @name AssetList
+     * @request GET:/asset
+     */
+    assetList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/asset`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags asset
      * @name AssetCreate
      * @request POST:/asset
      */
@@ -305,6 +319,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: body,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags asset
+     * @name AssetDetail
+     * @request GET:/asset/{id}
+     */
+    assetDetail: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/asset/${id}`,
+        method: "GET",
         ...params,
       }),
 

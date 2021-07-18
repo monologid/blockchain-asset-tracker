@@ -35,7 +35,7 @@ Reference for color branding [Green](https://colorhunt.co/palette/2f5d625e8b7ea7
 | Asset | Get list of assets | Done | |
 | Asset | Asset detail | In-Progress | Error when retrieving transaction from Bigchain |
 | Asset | Scan asset for status update | Backlog | |
-| Asset | Create new assets | Backlog | |
+| Asset | Create new assets | Done | |
 | Warehouse | Superadmin - Get list of warehouses | Done ||
 | Warehouse | Superadmin - Create new warehouse | Done ||
 | Warehouse | Superadmin - Get warehouse detail | Done ||

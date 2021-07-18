@@ -19,28 +19,32 @@ const LayoutSuperAdmin: FC<ILayoutSuperAdminProps> = ({ title, isPageLoading, ch
       </Head>
 
       <main>
-        <div className={`w-full flex justify-between items-center bg-primary-color text-white p-5`}>
-          <div className={`font-bold uppercase`}>Blockchain Tracker</div>
-          <div>
-            <i className={`fa fa-bars cursor-pointer`} onClick={e => setIsShowDrawer(true)}/>
-          </div>
-        </div>
+        
 
         { isPageLoading ? (
           <div className={`w-full h-screen flex justify-center items-center`}>
             <Loading />
           </div>
         ): (
-          <div className={`p-5`}>
-            {children}
-          </div>
+          <>
+            <div className={`w-full flex justify-between items-center bg-primary-color text-white p-5`}>
+              <div className={`font-bold uppercase`}>Blockchain Tracker</div>
+              <div>
+                <i className={`fa fa-bars cursor-pointer`} onClick={e => setIsShowDrawer(true)}/>
+              </div>
+            </div>
+
+            <div className={`p-5`}>
+              {children}
+            </div>
+          </>
         )}
       </main>
 
       <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
         <div className={`mt-10`}>
           <MenuItem title={`Warehouse`} href={`warehouse`} />
-          {/* <MenuItem title={`User Management`} href={`user`} /> */}
+          <MenuItem title={`Asset`} href={`asset`} />
         </div>
       </Drawer>
     </div>

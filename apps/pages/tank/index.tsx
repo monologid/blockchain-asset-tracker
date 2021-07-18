@@ -44,7 +44,7 @@ export default function Dashboard({ isUser }: any) {
           <div className={`font-bold text-primary text-xl mb-1`}>Tanks</div>
           <div className={`text-gray-400 mb-7`}>List of registered tanks</div>
           {assets.map((item: any, i: number) => (
-            <Link key={i} href={`/tank/${item.serialNumber}`}>
+            <Link key={i} href={`/tank/${item._id}`}>
               <div className={`border rounded p-5 mb-5 cursor-pointer`}>
                 <div><i className={`fa fa-ship text-primary`} /></div>
                 <div className={`text-primary font-bold text-lg`}>{item.serialNumber}</div>

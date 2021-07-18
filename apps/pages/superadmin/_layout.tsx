@@ -43,8 +43,9 @@ const LayoutSuperAdmin: FC<ILayoutSuperAdminProps> = ({ title, isPageLoading, ch
 
       <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
         <div className={`mt-10`}>
-          <MenuItem title={`Warehouse`} href={`warehouse`} />
-          <MenuItem title={`Asset`} href={`asset`} />
+          <MenuItem title={`Warehouse`} href={`/superadmin/warehouse`} />
+          <MenuItem title={`Asset`} href={`/superadmin/asset`} />
+          <MenuItem title={`Log out`} href={`/api/logout`} />
         </div>
       </Drawer>
     </div>
@@ -58,7 +59,7 @@ interface IMenuItemProps {
 
 const MenuItem: FC<IMenuItemProps> = ({ title, href }) => (
   <div className={`block mb-2`}>
-    <Link href={`/superadmin/${href}`}>{title}</Link>
+    <Link href={href}>{title}</Link>
   </div>
 )
 

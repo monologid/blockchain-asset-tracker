@@ -79,7 +79,7 @@ export default wrapHandlerError(async function handler(
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       })
-      res.status(200).json({ token: token})
+      res.status(200).json({ token: token })
       break;
     default:
       res.status(404).json({ message: "Request HTTP Method Incorrect." })

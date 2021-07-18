@@ -17,11 +17,13 @@ export function jwtVerify(token:string): JwtPayload | string{
 
 export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<any> ,onlyAdminAccess:boolean=false){
   const cookies = parseCookies({ req })
-  const { superadmin_token }: any = cookies
+  const { superadmin_token, user_token }: any = cookies
 
   let token: string
   if (superadmin_token) {
     token = superadmin_token
+  } else if (user_token) {
+    token = user_token
   } else if (req.headers['authorization']) {
     token = req.headers['authorization']
   } else {

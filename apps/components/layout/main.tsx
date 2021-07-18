@@ -37,16 +37,18 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
   }
 
   const onFinishFormAsset = async (values: any) => {
+    const { status, volume } = values
     setIsShowModalAssetRecord(false)
     setIsPageLoading(true)
     
     try {
       const api = new Api({ baseUrl: constant.BaseApiUrl })
-      await api.assets.recordCreate('1', { metadata: values })
+      await api.assets.recordCreate(values.asset, { metadata: { status, volume } })
       window.location.reload()
     } catch (e) {
       Modal.error({ title: 'Error', content: `Failed to submit new record for asset ${values.asset}` })
       formAsset.resetFields()
+      setIsPageLoading(false)
     }
   }
 
@@ -70,15 +72,13 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
             <div className={`container-mobile mx-auto`}>
               {!isShowScanner && children}
 
-              {isUser &&
-                <Scanner
-                  onQRError={onQRError}
-                  onQRScan={onQRScan}
-                  isShow={isShowScanner}
-                  setIsShow={setIsShowScanner} />
-              }
+              <Scanner
+                onQRError={onQRError}
+                onQRScan={onQRScan}
+                isShow={isShowScanner}
+                setIsShow={setIsShowScanner} />
 
-              {!isShowScanner &&
+              {!isShowScanner && isUser &&
                 <div className={`fixed bottom-0 right-0 p-8`}>
                   <button
                     className={`bg-primary-color font-bold text-white uppercase h-16 w-16 flex items-center justify-center rounded-full`}

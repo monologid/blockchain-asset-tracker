@@ -45,7 +45,7 @@ export default function SuperadminWarehousePage() {
         </div>
       }
 
-      {warehouses.length && warehouses.length > 0 &&
+      {warehouses.length > 0 &&
         <div className={`p-5 md:p-0 my-5`}>
           <div className={`flex justify-between items-center`}>
             <div>

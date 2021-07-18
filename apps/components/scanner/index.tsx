@@ -10,18 +10,21 @@ interface IScannerProps {
   readonly setIsShow: Function
 }
 
-const Scanner: FC<IScannerProps> = ({ onQRError, onQRScan, isShow, setIsShow }) => {
+const Scanner: FC<IScannerProps> = ({ onQRError, onQRScan, isShow, setIsShow}) => {
   return (
     <>
       {isShow &&
-        <div className={`flex flex-col justify-center items-center h-30`}>
-          {// @ts-ignore
-            <QrReader delay={300} onError={onQRError} onScan={onQRScan} style={{ width: 420 }} />
-          }
-          <div className={`mt-10`}>
-            <button
-              className={`bg-primary-color font-bold text-xs text-white uppercase h-20 w-20 flex items-center justify-center rounded-full`}
-              onClick={e => setIsShow(false)}>Close Scanner</button>
+        <div className={`flex justify-center items-center`} style={{height: '80vh'}}>
+          <div>
+            <div className={`text-center text-xs mb-2`}>The QR Code Scanner might take sometime to load</div>
+            {// @ts-ignore
+              <QrReader delay={300} onError={onQRError} onScan={onQRScan} style={{ width: 420 }} />
+            }
+            <div className={`mt-10 flex justify-center`}>
+              <button
+                className={`bg-primary-color font-bold text-xs text-white uppercase h-20 w-20 flex items-center justify-center rounded-full`}
+                onClick={e => setIsShow(false)}>Close Scanner</button>
+            </div>
           </div>
         </div>
       }

@@ -1,7 +1,7 @@
 import constant from "@/common/constant";
 import { ButtonPrimaryLink } from "@/components/button";
 import SvgImage from "@/components/svg";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Divider, Form, Input, Modal } from "antd";
 import { Api } from "clients/api-client";
 import moment from "moment";
 import { NextPageContext } from "next";
@@ -78,13 +78,19 @@ export default function SuperadminAssetPage() {
             </div>
           </div>
           {assets.map((item: any, i: number) => (
-            <Link key={i} href={`/asset/${item._id}/detail`}>
-              <div className={`border rounded p-5 mb-5 cursor-pointer`}>
-                <div><i className={`fa fa-desktop text-primary`} /></div>
-                <div className={`text-primary font-bold text-lg mb-2`}>{item.serialNumber}</div>
-                <div className={`text-sm text-gray-500`}>{item.manufacturer}</div>
+            <div className={`border rounded p-5 mb-5 cursor-pointer`}>
+              <div><i className={`fa fa-desktop text-primary`} /></div>
+              <div className={`text-primary font-bold text-lg mb-2`}>{item.serialNumber}</div>
+              <div className={`text-sm text-gray-500`}>{item.manufacturer}</div>
+              <div className={`flex justify-end items-center`}>
+                <div className={`mr-5`}>
+                  <a href={`/tank/${item._id}`} target={`_blank`}>View Detail</a>
+                </div>
+                <div>
+                  <a href={`/superadmin/asset/${item.serialNumber}/qr`} target={`_blank`}>Generate QR Code</a>
+                </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       }

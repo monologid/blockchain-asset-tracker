@@ -23,13 +23,16 @@ interface User{
   password: string
 }
 
+const adminEmail = process.env.SUPERADMIN_EMAIL 
+const adminPass = process.env.SUPERADMIN_PASSWORD 
+
 export default wrapHandlerError(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response|ResponseToken|Document[]|ValidationError[]>
 ) {
 
   const { db } = await DbConnection();
-  const { id } = req.query;
+
   switch (req.method) {
     case "POST":
       const schema = {
@@ -45,13 +48,23 @@ export default wrapHandlerError(async function handler(
         return res.status(400).json(validateResult)
       }
 
+      if(user.email==adminEmail && user.password==adminPass){
+        let token = jwtSign({
+          isAdmin:true
+        })
+        return res.status(200).json({ token: token});
+      }
+
       const result = await db.collection("users").findOne({email:user.email});
       const verified = await verify(user.password,(result as User).password);
       if(!verified){
         throw new ResponseError("please check again credential",400)
       }
       let {password,...payload} = result as any;
-      let token = jwtSign(payload)
+      let token = jwtSign({
+        isAdmin:false,
+        ...payload
+      })
       res.status(200).json({ token: token})
       break;
     default:

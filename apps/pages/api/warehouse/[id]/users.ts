@@ -5,6 +5,7 @@ import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import { wrapHandlerError,ResponseError } from '@/util/error';
 import {hash} from '@/util/password';
+import { authMiddleware } from '@/util/auth';
 
 const v = new Validator();
 
@@ -28,6 +29,8 @@ export default wrapHandlerError(async function handler(
   const { id } = req.query;
   switch (req.method) {
     case "POST":
+      await authMiddleware(req,res,true);
+
       const schema = {
         fullname: { type: "string", min: 3, max: 100 },
         email: { type: "email" },
@@ -53,6 +56,8 @@ export default wrapHandlerError(async function handler(
       res.status(200).json({ message: 'success create new user '})
       break;
     case "GET":
+      await authMiddleware(req,res,true);
+
       let results =  await db.collection("users").find({warehouseId:id}).toArray()
       res.status(200).json(results)
       break;

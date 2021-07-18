@@ -28,6 +28,7 @@ export default wrapHandlerError(async function handler(
     switch (req.method) {
       case "POST":
       await authMiddleware(req,res);
+      
       const user =  (req as NextApiAuthRequest).user;
       const warehouse =  (req as NextApiAuthRequest).warehouse;
     

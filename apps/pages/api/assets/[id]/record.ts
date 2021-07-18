@@ -24,9 +24,9 @@ export default wrapHandlerError(async function handler(
   const { id } = req.query;
   switch (req.method) {
     case "POST":
-
-
+      
       await authMiddleware(req,res);
+
       const user =  (req as NextApiAuthRequest).user;
       const warehouse =  (req as NextApiAuthRequest).warehouse;
       let assets =  await db.collection("assets").findOne({_id:new ObjectId(id as string)})
@@ -52,7 +52,6 @@ export default wrapHandlerError(async function handler(
       
       await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],{
         ...data.metadata,
-        user:user._id,
         warehouse:{
           ...warehouse,
           user:{

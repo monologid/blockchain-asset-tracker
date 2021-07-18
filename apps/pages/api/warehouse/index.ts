@@ -4,6 +4,7 @@ import {DbConnection} from '@/util/database'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import {wrapHandlerError} from '@/util/error';
+import { authMiddleware } from '@/util/auth';
 
 const v = new Validator();
 
@@ -26,8 +27,9 @@ export default wrapHandlerError(async function handler(
 
   const { db } = await DbConnection();
 
-  switch (req.method) {
+  switch (req.method) {    
     case "POST":
+      await authMiddleware(req,res,true);
       const schema = {
         name: { type: "string", min: 3, max: 100 },
         description: { type: "string", min: 10, max: 255 },

@@ -15,7 +15,7 @@ export function jwtVerify(token:string): JwtPayload | string{
 }
 
 
-export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<any>){
+export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<any> ,onlyAdminAccess:boolean=false){
   if(!req.headers['authorization']){
      throw new ResponseError("neee credential access this page",401);
   }
@@ -25,13 +25,22 @@ export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<
 
   try {
     const user = jwtVerify(token) as any;
-    const { db } = await DbConnection();
-    const warehouse =  await db.collection("warehouses").findOne({_id:new ObjectId(user.warehouseId as string)});
-    if(!warehouse){
-      throw new ResponseError('user dont have warehouse',401); 
+    if(onlyAdminAccess==true && user.isAdmin==false){
+      throw new ResponseError('only admin access',401); 
     }
-    (req as NextApiAuthRequest).user = user;
-    (req as NextApiAuthRequest).warehouse = warehouse;
+    const {isAdmin,...userData}=user;
+    if(user.admin==true){
+      (req as NextApiAuthRequest).isAdmin = isAdmin;
+    }else{
+      const { db } = await DbConnection();
+      const warehouse =  await db.collection("warehouses").findOne({_id:new ObjectId(user.warehouseId as string)});
+      if(!warehouse){
+        throw new ResponseError('user dont have warehouse',401); 
+      }
+      (req as NextApiAuthRequest).user = userData;
+      (req as NextApiAuthRequest).isAdmin = isAdmin;
+      (req as NextApiAuthRequest).warehouse = warehouse;
+    }
   
   } catch(err) {
     throw new ResponseError(err.message||err,401); 
@@ -42,5 +51,6 @@ export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<
 export interface NextApiAuthRequest extends NextApiRequest{
   user: any;
   warehouse: any;
+  isAdmin:boolean;
 
 }

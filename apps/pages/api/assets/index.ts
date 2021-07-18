@@ -5,6 +5,7 @@ import {BigchainInstance} from '@/util/bigchain'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import { wrapHandlerError } from '@/util/error';
+import {authMiddleware, NextApiAuthRequest} from '@/util/auth';
 
 const v = new Validator();
 type Response = {
@@ -22,12 +23,15 @@ const passphrase = 'This is a random passphrase'
 
 
 export default wrapHandlerError(async function handler(
-  req: NextApiRequest,
+  req:  NextApiRequest,
   res: NextApiResponse<Response|Document|ValidationError[]>
 ) {
     const { db } = await DbConnection();
     switch (req.method) {
       case "POST":
+      await authMiddleware(req,res);
+      const user =  (req as NextApiAuthRequest).user;
+    
       const schema = {
         serialNumber: { type: "string", min: 3, max: 100 },
         manufacturer: { type: "string", min: 3, max: 100 },
@@ -49,7 +53,12 @@ export default wrapHandlerError(async function handler(
           serialNumber:asset.serialNumber,
           manufacturer:asset.manufacturer
         }
-      },asset.metadata, keypair);
+      },{
+        ...asset.metadata,
+        user:user._id,
+        warehouseId:user.warehouseId,
+        time: new Date().toISOString()
+      }, keypair);
 
       await db.collection("assets").insertOne({
         serialNumber:asset.serialNumber,

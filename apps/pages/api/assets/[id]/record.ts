@@ -6,6 +6,8 @@ import {BigchainInstance} from '@/util/bigchain'
 
 import Validator, { ValidationError } from "fastest-validator";
 import { wrapHandlerError } from '@/util/error';
+import { authMiddleware, NextApiAuthRequest } from '@/util/auth';
+
 
 const v = new Validator();
 
@@ -25,6 +27,11 @@ export default wrapHandlerError(async function handler(
   const { id } = req.query;
   switch (req.method) {
     case "POST":
+
+
+      await authMiddleware(req,res);
+      const user =  (req as NextApiAuthRequest).user;
+      
       let assets =  await db.collection("assets").findOne({_id:new ObjectId(id as string)})
       if(!assets){
         res.status(404).json({ message: "Record Not Found" })
@@ -46,7 +53,12 @@ export default wrapHandlerError(async function handler(
 
       let transactions = await BigchainInstance.getTransactions(assets!.assetId as string)
       
-      await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],data.metadata,keypair)
+      await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],{
+        ...data.metadata,
+        user:user._id,
+        warehouseId:user.warehouseId,
+        time: new Date().toISOString()
+      },keypair)
       
       res.status(200).json({ message: "record updated" })
       break;

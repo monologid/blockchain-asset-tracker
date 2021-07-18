@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 export function wrapHandlerError(handler: (req: NextApiRequest, res: NextApiResponse<any>) => Promise<any>) {
-    return async ( req: NextApiRequest, res:NextApiResponse) => {
+    return async ( req: NextApiRequest , res:NextApiResponse) => {
       return handler(req, res)
         .catch((error:any) => { 
         

@@ -12,10 +12,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@types/antd": "^1.0.0",
+    "@types/jsonwebtoken": "^8.5.4",
     "antd": "^4.16.3",
     "bigchaindb-driver": "^4.2.2",
     "bip39": "^3.0.4",
     "fastest-validator": "^1.11.0",
+    "jsonwebtoken": "^8.5.1",
     "modern-react-qr-reader": "^1.0.12",
     "moment": "^2.29.1",
     "mongodb": "^4.0.0",

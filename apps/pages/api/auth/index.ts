@@ -4,13 +4,19 @@ import {DbConnection} from '@/util/database'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import { wrapHandlerError,ResponseError } from '@/util/error';
-import {verify,hash} from '@/util/password';
+import {verify} from '@/util/password';
+import {jwtSign} from '@/util/auth';
 
 const v = new Validator();
 
 type Response = {
-  message: string | boolean
+  message: string 
 }
+
+type ResponseToken = {
+  token: string 
+}
+
 
 interface User{
   email: string
@@ -19,7 +25,7 @@ interface User{
 
 export default wrapHandlerError(async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response|Document[]|ValidationError[]>
+  res: NextApiResponse<Response|ResponseToken|Document[]|ValidationError[]>
 ) {
 
   const { db } = await DbConnection();
@@ -44,7 +50,9 @@ export default wrapHandlerError(async function handler(
       if(!verified){
         throw new ResponseError("please check again credential",400)
       }
-      res.status(200).json({ message: verified})
+      let {password,...payload} = result as any;
+      let token = jwtSign(payload)
+      res.status(200).json({ token: token})
       break;
     default:
       res.status(404).json({ message: "Request HTTP Method Incorrect." })

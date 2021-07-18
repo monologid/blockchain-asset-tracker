@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseError } from './error';
 import {DbConnection} from '@/util/database'
 import { ObjectId } from 'mongodb';
+import { parseCookies } from 'nookies'
 
 const secret = process.env.JWT_SECRET || 'rahasia'
 
@@ -11,27 +12,34 @@ export function jwtSign(payload:object):string{
 }
 
 export function jwtVerify(token:string): JwtPayload | string{
-    return  verify(token, secret);
+  return verify(token, secret);
 }
 
-
 export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<any> ,onlyAdminAccess:boolean=false){
-  if(!req.headers['authorization']){
-     throw new ResponseError("neee credential access this page",401);
+  const cookies = parseCookies({ req })
+  const { superadmin_token }: any = cookies
+
+  let token: string
+  if (superadmin_token) {
+    token = superadmin_token
+  } else if (req.headers['authorization']) {
+    token = req.headers['authorization']
+  } else {
+    throw new ResponseError("need credential access this page",401);
   }
 
-  const tokenParams = req.headers['authorization'].split(" ");
-  const token = (tokenParams.length==1)?tokenParams[0]:tokenParams[1];
+  token = token.split(' ').length > 1 ? token.split(' ')[1] : token
 
   try {
     const user = jwtVerify(token) as any;
-    if(onlyAdminAccess==true && user.isAdmin==false){
-      throw new ResponseError('only admin access',401); 
-    }
-    const {isAdmin,...userData}=user;
-    if(user.admin==true){
+
+    if(onlyAdminAccess && !user.isAdmin) throw new ResponseError('only admin access',401);
+
+    const {isAdmin,...userData} = user;
+
+    if (user.isAdmin) {
       (req as NextApiAuthRequest).isAdmin = isAdmin;
-    }else{
+    } else {
       const { db } = await DbConnection();
       const warehouse =  await db.collection("warehouses").findOne({_id:new ObjectId(user.warehouseId as string)});
       if(!warehouse){

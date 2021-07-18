@@ -11,9 +11,10 @@ import constant from "@/common/constant";
 interface IMainLayoutProps {
   readonly title: string
   readonly isLoading: boolean
+  readonly isUser?: boolean
 }
 
-const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }) => {
+const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = false, children }) => {
   const [isShowDrawer, setIsShowDrawer] = useState<boolean>(false)
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [isShowScanner, setIsShowScanner] = useState<boolean>(false)
@@ -69,11 +70,13 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
             <div className={`container-mobile mx-auto`}>
               {!isShowScanner && children}
 
-              <Scanner
-                onQRError={onQRError}
-                onQRScan={onQRScan}
-                isShow={isShowScanner}
-                setIsShow={setIsShowScanner} />
+              {isUser &&
+                <Scanner
+                  onQRError={onQRError}
+                  onQRScan={onQRScan}
+                  isShow={isShowScanner}
+                  setIsShow={setIsShowScanner} />
+              }
 
               {!isShowScanner &&
                 <div className={`fixed bottom-0 right-0 p-8`}>

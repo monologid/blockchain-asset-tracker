@@ -5,8 +5,10 @@ import Link from "next/link";
 import { Api } from "clients/api-client";
 import constant from "@/common/constant";
 import { Modal } from "antd";
+import { NextPageContext } from "next";
+import { parseCookies } from 'nookies'
 
-export default function Dashboard() {
+export default function Dashboard({ isUser }: any) {
   const api = new Api({ baseUrl: constant.BaseApiUrl })
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [assets, setAssets] = useState<any>([])
@@ -28,7 +30,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <MainLayout title={`Home`} isLoading={isPageLoading}>
+    <MainLayout title={`Home`} isLoading={isPageLoading} isUser={isUser}>
       {assets.length == 0 &&
         <div className={`flex flex-col justify-center items-center`} style={{height: 600}}>
           <SvgImage src={`empty`} />
@@ -53,4 +55,14 @@ export default function Dashboard() {
       }
     </MainLayout>
   )
+}
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const cookies = parseCookies(ctx)
+  
+  return {
+    props: {
+      isUser: cookies!.user_token ? true : false
+    }
+  }
 }

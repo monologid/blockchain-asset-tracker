@@ -1,7 +1,7 @@
 import { MongoClient,Db } from 'mongodb';
 
-const uri = 'mongodb://bigchaindb:27017'
-const dbName = 'myProject'
+const uri = process.env.DB_URI || 'mongodb://bigchaindb:27017'
+const dbName = process.env.DB_NAME || 'myProject'
 
 
 let cachedClient:MongoClient

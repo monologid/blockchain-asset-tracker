@@ -2,8 +2,11 @@ import {FC, useState} from "react";
 import Head from "next/head";
 import Loading from "../icon/loader";
 import Scanner from "@/components/scanner";
-import { Drawer } from "antd";
+import { Button, Drawer, Form, Input, InputNumber, Select } from "antd";
 import Link from "next/link";
+import {Modal} from "antd";
+import { Api } from "clients/api-client";
+import constant from "@/common/constant";
 
 interface IMainLayoutProps {
   readonly title: string
@@ -14,16 +17,36 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
   const [isShowDrawer, setIsShowDrawer] = useState<boolean>(false)
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [isShowScanner, setIsShowScanner] = useState<boolean>(false)
+
+  const [qrData, setQrData] = useState<string | null>(null)
+  const [isShowModalAssetRecord, setIsShowModalAssetRecord] = useState<boolean>(false)
+  const [formAsset] = Form.useForm()
   const onQRScan = (data: any) => {
     if (data) {
       setIsShowScanner(false)
-      alert(data)
-      setIsPageLoading(true)
+      setQrData(data)
+      setIsShowModalAssetRecord(true)
+      formAsset.setFieldsValue({ asset: data })
     }
   }
 
   const onQRError = (err: any) => {
-    alert(err)
+    console.dir(err)
+    Modal.error({ title: 'Error', content: err })
+  }
+
+  const onFinishFormAsset = async (values: any) => {
+    setIsShowModalAssetRecord(false)
+    setIsPageLoading(true)
+    
+    try {
+      const api = new Api({ baseUrl: constant.BaseApiUrl })
+      await api.asset.recordCreate('1', { metadata: values })
+      window.location.reload()
+    } catch (e) {
+      Modal.error({ title: 'Error', content: `Failed to submit new record for asset ${values.asset}` })
+      formAsset.resetFields()
+    }
   }
 
   return (
@@ -70,6 +93,29 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
           <MenuItem title={`Log Out`} href={`/`} />
         </div>
       </Drawer>
+
+      <Modal visible={isShowModalAssetRecord} onCancel={e => setIsShowModalAssetRecord(false)} footer={null}>
+        <Form form={formAsset} onFinish={onFinishFormAsset}>
+          <Form.Item label={`Asset`} name={`asset`} required>
+            <Input disabled />
+          </Form.Item>
+
+          <Form.Item label={`Status`} name={`status`} required>
+            <Select>
+              <Select.Option value={`IN`}>IN</Select.Option>
+              <Select.Option value={`OUT`}>OUT</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label={`Volume`} name={`volume`} required>
+            <InputNumber />
+          </Form.Item>
+
+          <div className={`flex justify-end items-center`}>
+            <Button type={`primary`} htmlType={`submit`}>Submit</Button>
+          </div>
+        </Form>
+      </Modal>
     </div>
   )
 }

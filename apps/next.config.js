@@ -13,6 +13,9 @@ module.exports = {
     FACEBOOK_OAUTH_SCOPE: process.env.FACEBOOK_OAUTH_SCOPE,
     FACEBOOK_OAUTH_FIELDS: process.env.FACEBOOK_OAUTH_FIELDS,
 
-    BASE_API_URL: process.env.BASE_API_URL
+    BASE_API_URL: process.env.BASE_API_URL,
+    DB_URI: process.env.DB_URI,
+    DB_NAME: process.env.DB_NAME,
+    BIGCHAINDB_URI: process.env.BIGCHAINDB_URI
   }
 }

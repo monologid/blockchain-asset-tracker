@@ -9,22 +9,17 @@ import { Modal } from "antd";
 export default function Dashboard() {
   const api = new Api({ baseUrl: constant.BaseApiUrl })
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
-  const [assets, setAssets] = useState<any>([
-    {
-      serialNumber: 'ISOT-00001',
-      status: 'Shipping',
-      location: 'Bandung'
-    }
-  ])
+  const [assets, setAssets] = useState<any>([])
   
   const getAssets = async () => {
     try {
       setIsPageLoading(true)
-      const result = await api.asset.assetList()
-      setAssets(result.json())
+      const result = await api.assets.assetsList()
+      setAssets(result.data)
     } catch (e) {
-      setIsPageLoading(false)
       Modal.error({ title: 'Error', content: 'Something went wrong when retrieving assets. Please try again later.'})
+    } finally {
+      setIsPageLoading(false)
     }
   }
 
@@ -50,11 +45,7 @@ export default function Dashboard() {
             <Link key={i} href={`/tank/${item.serialNumber}`}>
               <div className={`border rounded p-5 mb-5 cursor-pointer`}>
                 <div><i className={`fa fa-ship text-primary`} /></div>
-                <div className={`text-primary font-bold text-lg mb-2`}>{item.serialNumber}</div>
-                <div className={`flex justify-between items-center text-gray-400 text-xs`}>
-                  <div>Status: {item.status}</div>
-                  <div>Location: {item.location}</div>
-                </div>
+                <div className={`text-primary font-bold text-lg`}>{item.serialNumber}</div>
               </div>
             </Link>
           ))}

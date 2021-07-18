@@ -98,7 +98,7 @@ paths:
         200:
           description: success
 
-  /asset:
+  /assets:
     get:
       tags:
         - asset
@@ -123,14 +123,14 @@ paths:
       responses:
         200:
           description: success
-  /asset/{id}:
+  /assets/{id}:
     get:
       tags:
         - asset
       responses:
         200:
           description: success
-  /asset/{id}/record:
+  /assets/{id}/record:
     post:
       tags:
         - asset

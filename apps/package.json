@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "less-compile": "./node_modules/.bin/lessc --js ./styles/style.less ./styles/style.css",
+    "generate-api-client": "npx swagger-typescript-api@5.1.7 -p ./clients/openapi.yml -o ./clients/ -n api-client.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -22,6 +23,7 @@
     "moment": "^2.29.1",
     "mongodb": "^4.0.0",
     "next": "11.0.0",
+    "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "tailwindcss": "^2.1.4"

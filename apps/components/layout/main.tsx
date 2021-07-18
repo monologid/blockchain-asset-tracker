@@ -93,7 +93,7 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
       <Drawer visible={isShowDrawer} onClose={e => setIsShowDrawer(false)}>
         <div className={`pt-10`}>
           <MenuItem title={`Assets`} href={`/tank`} />
-          <MenuItem title={`Log Out`} href={`/`} />
+          <MenuItem title={`Log Out`} href={`/api/logout`} />
         </div>
       </Drawer>
 

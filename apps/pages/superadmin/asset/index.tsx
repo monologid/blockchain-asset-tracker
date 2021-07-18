@@ -82,7 +82,7 @@ export default function SuperadminAssetPage() {
               <div><i className={`fa fa-desktop text-primary`} /></div>
               <div className={`text-primary font-bold text-lg mb-2`}>{item.serialNumber}</div>
               <div className={`text-sm text-gray-500`}>{item.manufacturer}</div>
-              <div className={`flex justify-end items-center`}>
+              <div className={`flex justify-end items-center mt-5`}>
                 <div className={`mr-5`}>
                   <a href={`/tank/${item._id}`} target={`_blank`}>View Detail</a>
                 </div>

@@ -6,6 +6,7 @@ import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import { wrapHandlerError,ResponseError } from '@/util/error';
 import {authMiddleware, NextApiAuthRequest} from '@/util/auth';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 const v = new Validator();
 type Response = {
@@ -49,26 +50,28 @@ export default wrapHandlerError(async function handler(
       // search asssets on offchain
       let assets =  await db.collection("assets").findOne({serialNumber:asset.serialNumber})
       if(assets){
-        throw new ResponseError('serial number already exist',400);
+        throw new ResponseError('serial number already exist - offchain',400);
       }
       
       // search asssets on blockhcian/onchain
-      let assestBigchain = await BigchainInstance.searchAssets(asset.serialNumber);
-      if(assestBigchain.length>0){
-        throw new ResponseError('serial number already exist',400);
-      }
+      // let assestBigchain = await BigchainInstance.searchAssets(asset.serialNumber);
+      // if(assestBigchain.length>0 && assestBigchain[0]?.data?.tank?.serialNumber == asset.serialNumber){
+      //   throw new ResponseError('serial number already exist - onchain',400);
+      // }
 
       let keypair =  await BigchainInstance.getDefaultKeyPair();
       
-      let assetBigchain = await BigchainInstance.createAsset({
-        o2Thank:{
-          serialNumber:asset.serialNumber,
-          manufacturer:asset.manufacturer
+      let bigchainAsset = {
+        tank: {
+          serialNumber: asset.serialNumber,
+          manufacturer: asset.manufacturer
         }
-      },{
+      }
+      let bigchainMetadata = {
         ...asset.metadata,
         time: new Date().toISOString()
-      }, keypair);
+      }
+      let assetBigchain = await BigchainInstance.createAsset(bigchainAsset, bigchainMetadata, keypair);
 
       await db.collection("assets").insertOne({
         serialNumber:asset.serialNumber,

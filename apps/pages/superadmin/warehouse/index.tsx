@@ -10,30 +10,24 @@ import LayoutSuperAdmin from "../_layout";
 
 export default function SuperadminWarehousePage() {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
-  const [warehouses, setWarehouses] = useState<any>([
-    {
-      id: 1,
-      name: 'Warehouse A',
-      description: 'Located in A',
-      latitude: 0, longitude: 0
-    }
-  ])
+  const [warehouses, setWarehouses] = useState<any>([])
 
   const getWarehouses = async () => {
     const api = new Api({ baseUrl: constant.BaseApiUrl })
     try {
       setIsPageLoading(true)
       const result = await api.warehouse.warehouseList()
-      setWarehouses(result)
-      setIsPageLoading(false)
+      console.dir(result.data)
+      setWarehouses(result.data)
     } catch (e) {
-      setIsPageLoading(false)
       Modal.error({ title: 'Error', content: 'Failed to retrieve list of warehouse. Please try again later.'})
+    } finally {
+      setIsPageLoading(false)
     }
   }
 
   useEffect(() => {
-    // getWarehouses().then(null)
+    getWarehouses().then(null)
   }, [])
 
   return (
@@ -50,10 +44,17 @@ export default function SuperadminWarehousePage() {
         </div>
       }
 
-      {warehouses.length > 0 &&
+      {warehouses.length && warehouses.length > 0 &&
         <div className={`p-5 md:p-0 my-5`}>
-          <div className={`font-bold text-primary text-xl mb-1`}>Warehouses</div>
-          <div className={`text-gray-400 mb-7`}>List of registered warehouses</div>
+          <div className={`flex justify-between items-center`}>
+            <div>
+              <div className={`font-bold text-primary text-xl mb-1`}>Warehouses</div>
+              <div className={`text-gray-400 mb-7`}>List of registered warehouses</div>
+            </div>
+            <div>
+              <ButtonPrimaryLink title={`+ Create`} href={`/superadmin/warehouse/create`} />
+            </div>
+          </div>
           {warehouses.map((item: any, i: number) => (
             <Link key={i} href={`/superadmin/warehouse/${item.id}/detail`}>
               <div className={`border rounded p-5 mb-5 cursor-pointer`}>

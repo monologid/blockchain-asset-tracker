@@ -31,7 +31,9 @@ const LayoutSuperAdmin: FC<ILayoutSuperAdminProps> = ({ title, isPageLoading, ch
             <Loading />
           </div>
         ): (
-          children
+          <div className={`p-5`}>
+            {children}
+          </div>
         )}
       </main>
 

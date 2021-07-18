@@ -26,30 +26,28 @@ export default function SuperadminWarehouseCreatePage() {
 
   return (
     <LayoutSuperAdmin title={`Warehouse | Create`} isPageLoading={isPageLoading}>
-      <div className={`p-5`}>
-        <div className={`text-primary text-lg font-bold mb-5`}>Create a new Warehouse</div>
-        <Form form={form} onFinish={onFinish} layout={`vertical`}>
-          <Form.Item label={`Name`} name={`name`} rules={[{required:true}]} required>
-            <Input />
-          </Form.Item>
+      <div className={`text-primary text-lg font-bold mb-5`}>Create a new Warehouse</div>
+      <Form form={form} onFinish={onFinish} layout={`vertical`}>
+        <Form.Item label={`Name`} name={`name`} rules={[{required:true}]} required>
+          <Input />
+        </Form.Item>
 
-          <Form.Item label={`Description`} name={`description`} rules={[{required:false}]}>
-            <TextArea />
-          </Form.Item>
+        <Form.Item label={`Description`} name={`description`} rules={[{required:false}]}>
+          <TextArea />
+        </Form.Item>
 
-          <Form.Item label={`Latitude`} name={`latitude`} rules={[{required:true}]} required>
-            <Input />
-          </Form.Item>
+        <Form.Item label={`Latitude`} name={`latitude`} rules={[{required:true}]} required>
+          <Input />
+        </Form.Item>
 
-          <Form.Item label={`Longitude`} name={`longitude`} rules={[{required:true}]} required>
-            <Input />
-          </Form.Item>
+        <Form.Item label={`Longitude`} name={`longitude`} rules={[{required:true}]} required>
+          <Input />
+        </Form.Item>
 
-          <div className={`flex justify-end`}>
-            <ButtonPrimary title={`Submit`} />
-          </div>
-        </Form>
-      </div>
+        <div className={`flex justify-end`}>
+          <ButtonPrimary title={`Submit`} />
+        </div>
+      </Form>
     </LayoutSuperAdmin>
   )
 }

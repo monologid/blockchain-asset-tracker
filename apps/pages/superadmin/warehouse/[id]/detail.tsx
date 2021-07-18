@@ -6,6 +6,7 @@ import { Api } from "clients/api-client"
 import { NextPageContext } from "next"
 import LayoutSuperAdmin from "pages/superadmin/_layout"
 import { useEffect, useState } from "react"
+import { parseCookies } from "nookies"
 
 export default function WarehouseDetailPage({ id }: any) {
   const api = new Api({ baseUrl: constant.BaseApiUrl })
@@ -133,9 +134,17 @@ export default function WarehouseDetailPage({ id }: any) {
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const { id } = ctx.query
-  return {
-    props: {
-      id
+  const cookies = parseCookies(ctx)
+  if (!cookies?.superadmin_token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
     }
+  }
+
+  return {
+    props: {id}
   }
 }

@@ -6,6 +6,7 @@ import { Document} from 'mongodb'
 import { wrapHandlerError,ResponseError } from '@/util/error';
 import {verify} from '@/util/password';
 import {jwtSign} from '@/util/auth';
+import nookies from 'nookies';
 
 const v = new Validator();
 
@@ -37,22 +38,28 @@ export default wrapHandlerError(async function handler(
     case "POST":
       const schema = {
         email: { type: "email" },
-        password: { type: "string", min: 6 }, 
+        password: { type: "string", min: 3 }, 
       };
 
       const check = v.compile(schema);
       const user = req.body as User
       const validateResult = check(user);
 
-      if (Array.isArray(validateResult)) {
-        return res.status(400).json(validateResult)
-      }
-
       if(user.email==adminEmail && user.password==adminPass){
         let token = jwtSign({
           isAdmin:true
         })
+        
+        nookies.set({ res }, 'superadmin_token', token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        })
+
         return res.status(200).json({ token: token});
+      }
+
+      if (Array.isArray(validateResult)) {
+        return res.status(400).json(validateResult)
       }
 
       const result = await db.collection("users").findOne({email:user.email});
@@ -64,6 +71,10 @@ export default wrapHandlerError(async function handler(
       let token = jwtSign({
         isAdmin:false,
         ...payload
+      })
+      nookies.set({ res }, 'user_token', token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
       })
       res.status(200).json({ token: token})
       break;

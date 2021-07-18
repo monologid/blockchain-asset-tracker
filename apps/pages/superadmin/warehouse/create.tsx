@@ -6,6 +6,8 @@ import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 import LayoutSuperAdmin from "../_layout";
 import constant from "common/constant"
+import { NextPageContext } from "next";
+import { parseCookies } from "nookies";
 
 export default function SuperadminWarehouseCreatePage() {
   const router = useRouter()
@@ -50,4 +52,20 @@ export default function SuperadminWarehouseCreatePage() {
       </Form>
     </LayoutSuperAdmin>
   )
+}
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const cookies = parseCookies(ctx)
+  if (!cookies?.superadmin_token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {}
+  }
 }

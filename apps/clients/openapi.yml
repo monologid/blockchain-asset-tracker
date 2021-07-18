@@ -9,6 +9,7 @@ info:
 host: "localhost:3000"
 basePath: "/api"
 tags:
+- name: "auth"
 - name: "warehouse"
   description: "Warehouse API"
 - name: "asset"
@@ -17,6 +18,24 @@ schemes:
 - "https"
 - "http"
 paths:
+  /auth:
+    post:
+      tags:
+        - auth
+      description: Sign in
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: success
   /warehouse:
     get:
       tags:

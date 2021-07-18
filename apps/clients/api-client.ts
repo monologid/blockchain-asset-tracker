@@ -206,6 +206,23 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl https://localhost:3000/api
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  auth = {
+    /**
+     * @description Sign in
+     *
+     * @tags auth
+     * @name AuthCreate
+     * @request POST:/auth
+     */
+    authCreate: (body: { email?: string; password?: string }, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/auth`,
+        method: "POST",
+        body: body,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
   warehouse = {
     /**
      * @description List all warehouse

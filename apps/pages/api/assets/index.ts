@@ -55,13 +55,6 @@ export default wrapHandlerError(async function handler(
         }
       },{
         ...asset.metadata,
-        warehouse:{
-          ...warehouse,
-          user:{
-            _id:user._id,
-            fullname:user.fullname
-          }
-        },
         time: new Date().toISOString()
       }, keypair);
 

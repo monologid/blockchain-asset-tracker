@@ -34,6 +34,11 @@ class Bigchain{
         return new Ed25519Keypair(seed.slice(0,32))
     }
    
+    async getDefaultKeyPair():Promise<Ed25519Keypair>{
+     
+        return  this.generateKeyPairFormPassphrase(passphrase);
+    }
+
    
     createAsset(assetdata:Record<string, any>,metadata:Record<string, any>, keypair:Ed25519Keypair):Promise<EndpointsResponse<TransactionOperations.CREATE,  Record<string, any>,  Record<string, any>>[Endpoints.transactionsCommit]>{
   

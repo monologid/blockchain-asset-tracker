@@ -4,7 +4,7 @@ import {DbConnection} from '@/util/database'
 import {BigchainInstance} from '@/util/bigchain'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
-import { wrapHandlerError } from '@/util/error';
+import { wrapHandlerError,ResponseError } from '@/util/error';
 import {authMiddleware, NextApiAuthRequest} from '@/util/auth';
 
 const v = new Validator();
@@ -44,6 +44,11 @@ export default wrapHandlerError(async function handler(
 
       if (Array.isArray(validateResult)) {
         return res.status(400).json(validateResult)
+      }
+
+      let assets =  await db.collection("assets").findOne({serialNumber:asset.serialNumber})
+      if(assets){
+        throw new ResponseError('serial number already exist',400);
       }
 
       let keypair =  await BigchainInstance.getDefaultKeyPair();

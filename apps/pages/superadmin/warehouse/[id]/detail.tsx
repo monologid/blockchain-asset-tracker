@@ -103,7 +103,7 @@ export default function WarehouseDetailPage({ id }: any) {
         {errors.length > 0 &&
           <div className={`mb-5`}>
             {errors.map((item: any, i: number) => (
-              <div className={`mb-2`}><Alert key={i} type={`error`} message={item.message}/></div>
+              <div key={i} className={`mb-2`}><Alert type={`error`} message={item.message}/></div>
             ))}
           </div>
         }

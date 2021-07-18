@@ -31,7 +31,7 @@ export default wrapHandlerError(async function handler(
 
       await authMiddleware(req,res);
       const user =  (req as NextApiAuthRequest).user;
-      
+      const warehouse =  (req as NextApiAuthRequest).warehouse;
       let assets =  await db.collection("assets").findOne({_id:new ObjectId(id as string)})
       if(!assets){
         res.status(404).json({ message: "Record Not Found" })
@@ -56,7 +56,10 @@ export default wrapHandlerError(async function handler(
       await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],{
         ...data.metadata,
         user:user._id,
-        warehouseId:user.warehouseId,
+        warehouse:{
+          ...warehouse,
+          user:user
+        },
         time: new Date().toISOString()
       },keypair)
       

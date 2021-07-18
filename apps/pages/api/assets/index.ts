@@ -31,6 +31,7 @@ export default wrapHandlerError(async function handler(
       case "POST":
       await authMiddleware(req,res);
       const user =  (req as NextApiAuthRequest).user;
+      const warehouse =  (req as NextApiAuthRequest).warehouse;
     
       const schema = {
         serialNumber: { type: "string", min: 3, max: 100 },
@@ -55,8 +56,10 @@ export default wrapHandlerError(async function handler(
         }
       },{
         ...asset.metadata,
-        user:user._id,
-        warehouseId:user.warehouseId,
+        warehouse:{
+          ...warehouse,
+          user:user
+        },
         time: new Date().toISOString()
       }, keypair);
 

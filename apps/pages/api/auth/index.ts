@@ -4,19 +4,17 @@ import {DbConnection} from '@/util/database'
 import Validator, { ValidationError } from "fastest-validator";
 import { Document} from 'mongodb'
 import { wrapHandlerError,ResponseError } from '@/util/error';
-import {hash} from '@/util/password';
+import {verify,hash} from '@/util/password';
 
 const v = new Validator();
 
 type Response = {
-  message: string
+  message: string | boolean
 }
 
 interface User{
-  fullname: string
   email: string
   password: string
-  phoneNo: string
 }
 
 export default wrapHandlerError(async function handler(
@@ -29,10 +27,8 @@ export default wrapHandlerError(async function handler(
   switch (req.method) {
     case "POST":
       const schema = {
-        fullname: { type: "string", min: 3, max: 100 },
         email: { type: "email" },
         password: { type: "string", min: 6 }, 
-        phoneNo: "string" 
       };
 
       const check = v.compile(schema);
@@ -44,17 +40,11 @@ export default wrapHandlerError(async function handler(
       }
 
       const result = await db.collection("users").findOne({email:user.email});
-      if(result){
-        throw new ResponseError ("email already exist",400);
+      const verified = await verify(user.password,(result as User).password);
+      if(!verified){
+        throw new ResponseError("please check again credential",400)
       }
-
-      user.password = await hash(user.password);
-      await db.collection("users").insertOne({...user,warehouseId:id})
-      res.status(200).json({ message: 'success create new user '})
-      break;
-    case "GET":
-      let results =  await db.collection("users").find({warehouseId:id}).toArray()
-      res.status(200).json(results)
+      res.status(200).json({ message: verified})
       break;
     default:
       res.status(404).json({ message: "Request HTTP Method Incorrect." })

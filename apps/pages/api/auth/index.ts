@@ -56,6 +56,9 @@ export default wrapHandlerError(async function handler(
       }
 
       const result = await db.collection("users").findOne({email:user.email});
+      if(!result){
+        throw new ResponseError("please check again credential",400)
+      }
       const verified = await verify(user.password,(result as User).password);
       if(!verified){
         throw new ResponseError("please check again credential",400)

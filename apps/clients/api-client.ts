@@ -288,17 +288,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
-  asset = {
+  assets = {
     /**
      * No description
      *
      * @tags asset
-     * @name AssetList
-     * @request GET:/asset
+     * @name AssetsList
+     * @request GET:/assets
      */
-    assetList: (params: RequestParams = {}) =>
+    assetsList: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/asset`,
+        path: `/assets`,
         method: "GET",
         ...params,
       }),
@@ -307,15 +307,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags asset
-     * @name AssetCreate
-     * @request POST:/asset
+     * @name AssetsCreate
+     * @request POST:/assets
      */
-    assetCreate: (
+    assetsCreate: (
       body: { serialNumber?: string; manufacturer?: string; metadata?: object },
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/asset`,
+        path: `/assets`,
         method: "POST",
         body: body,
         type: ContentType.Json,
@@ -326,12 +326,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags asset
-     * @name AssetDetail
-     * @request GET:/asset/{id}
+     * @name AssetsDetail
+     * @request GET:/assets/{id}
      */
-    assetDetail: (id: string, params: RequestParams = {}) =>
+    assetsDetail: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/asset/${id}`,
+        path: `/assets/${id}`,
         method: "GET",
         ...params,
       }),
@@ -341,11 +341,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags asset
      * @name RecordCreate
-     * @request POST:/asset/{id}/record
+     * @request POST:/assets/{id}/record
      */
     recordCreate: (id: string, body: { metadata?: object }, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/asset/${id}/record`,
+        path: `/assets/${id}/record`,
         method: "POST",
         body: body,
         type: ContentType.Json,

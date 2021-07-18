@@ -1,18 +1,19 @@
 import constant from "@/common/constant"
 import SvgImage from "@/components/svg"
 import { ConsoleSqlOutlined } from "@ant-design/icons"
-import { Button, Form, Input, Modal } from "antd"
+import { Alert, Button, Form, Input, Modal } from "antd"
 import { Api } from "clients/api-client"
 import { NextPageContext } from "next"
 import LayoutSuperAdmin from "pages/superadmin/_layout"
 import { useEffect, useState } from "react"
 
-export default function WarehouseDetailPage({ id }) {
+export default function WarehouseDetailPage({ id }: any) {
   const api = new Api({ baseUrl: constant.BaseApiUrl })
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [isShowModalCreateUser, setIsShowModalCreateUser] = useState<boolean>(false)
   const [warehouse, setWarehouse] = useState<any>({})
   const [users, setUsers] = useState<any>([])
+  const [errors, setErrors] = useState<any>([])
 
   const [formCreateUser] = Form.useForm()
   
@@ -20,12 +21,11 @@ export default function WarehouseDetailPage({ id }) {
     try {
       setIsPageLoading(true)
       const result = await api.warehouse.warehouseDetail(id)
-      setWarehouse(result.json())
+      setWarehouse(result.data)
       await getWarehouseUsers(id)
     } catch (e) {
       setIsPageLoading(false)
       Modal.error({ title: 'Error', content: 'Failed to retrieve list of warehouse. Please try again later.'})
-      console.dir(e)
     }
   }
 
@@ -33,12 +33,11 @@ export default function WarehouseDetailPage({ id }) {
     try {
       setIsPageLoading(true)
       const result = await api.warehouse.usersDetail(id)
-      setUsers(result.json())
-      setIsPageLoading(false)
+      setUsers(result.data)
     } catch (e) {
-      setIsPageLoading(false)
       Modal.error({ title: 'Error', content: 'Failed to retrieve list of warehouse. Please try again later.'})
-      console.dir(e)
+    } finally {
+      setIsPageLoading(false)
     }
   }
 
@@ -50,7 +49,7 @@ export default function WarehouseDetailPage({ id }) {
     } catch (e) {
       setIsPageLoading(false)
       Modal.error({ title: 'Error', content: 'Failed to create new user.'})
-      console.dir(e)
+      setErrors(e.error)
     }
   }
 
@@ -71,7 +70,7 @@ export default function WarehouseDetailPage({ id }) {
 
           <div className={`flex justify-between items-center`}>
             <div className={`font-bold text-primary text-xl mb-3`}>Users</div>
-            <div><Button onClick={e => setIsShowModalCreateUser(true)}>Create</Button></div>
+            <div><Button type={`primary`} onClick={e => setIsShowModalCreateUser(true)}>Create</Button></div>
           </div>
           {users.length == 0 && 
             <div className={`flex flex-col justify-center items-center`}>
@@ -101,6 +100,14 @@ export default function WarehouseDetailPage({ id }) {
         }}
         title={`Create new user`}
         footer={null}>
+        {errors.length > 0 &&
+          <div className={`mb-5`}>
+            {errors.map((item: any, i: number) => (
+              <div key={i} className={`mb-2`}><Alert type={`error`} message={item.message}/></div>
+            ))}
+          </div>
+        }
+
         <Form form={formCreateUser} onFinish={onFinishCreateUser} layout={`vertical`}>
           <Form.Item label={`Fullname`} name={`fullname`} rules={[{required:true}]} required>
             <Input />

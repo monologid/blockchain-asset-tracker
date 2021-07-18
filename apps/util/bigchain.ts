@@ -6,12 +6,14 @@ import type {
   } from 'bigchaindb-driver/types/transaction';
 import * as bip39 from 'bip39'
 
+const conn_uri = process.env.BIGCHAINDB_URI || 'http://bigchaindb:9984/api/v1/'
+
 class Bigchain{
     private conn:Connection;
     private static _instance:Bigchain;
 
     constructor(){
-        this.conn = new Connection('http://bigchaindb:9984/api/v1/')
+        this.conn = new Connection(conn_uri)
     }
 
     static get instance() {

@@ -7,6 +7,7 @@ import { NextPageContext } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LayoutSuperAdmin from "../_layout";
+import {parseCookies} from "nookies"
 
 export default function SuperadminWarehousePage() {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
@@ -70,8 +71,18 @@ export default function SuperadminWarehousePage() {
   )
 }
 
-export async function getStaticProps(ctx: NextPageContext) {
-  return { 
+export async function getServerSideProps(ctx: NextPageContext) {
+  const cookies = parseCookies(ctx)
+  if (!cookies?.superadmin_token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
     props: {}
   }
 }

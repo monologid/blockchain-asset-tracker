@@ -41,7 +41,7 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, children }
     
     try {
       const api = new Api({ baseUrl: constant.BaseApiUrl })
-      await api.asset.recordCreate('1', { metadata: values })
+      await api.assets.recordCreate('1', { metadata: values })
       window.location.reload()
     } catch (e) {
       Modal.error({ title: 'Error', content: `Failed to submit new record for asset ${values.asset}` })

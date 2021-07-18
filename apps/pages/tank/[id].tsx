@@ -42,7 +42,7 @@ export default function TankDetail({ id }: any) {
   const getAssetDetail = async (id: string) => {
     try {
       setIsPageLoading(true)
-      const result = await (await api.asset.assetDetail(id)).json()
+      const result = await (await api.assets.assetsDetail(id)).json()
       setTank(result.assets)
       setIsPageLoading(false)
     } catch (e) {

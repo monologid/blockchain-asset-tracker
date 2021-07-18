@@ -18,7 +18,7 @@ const Scanner: FC<IScannerProps> = ({ onQRError, onQRScan, isShow, setIsShow}) =
           <div>
             <div className={`text-center text-xs mb-2`}>The QR Code Scanner might take sometime to load</div>
             {// @ts-ignore
-              <QrReader delay={300} onError={onQRError} onScan={onQRScan} style={{ width: 420 }} />
+              <QrReader delay={300} onError={onQRError} onScan={onQRScan} style={{ width: 350 }} />
             }
             <div className={`mt-10 flex justify-center`}>
               <button

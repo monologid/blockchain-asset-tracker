@@ -19,8 +19,6 @@ interface Asset{
 }
 
 
-const passphrase = 'This is a random passphrase'
-
 
 export default wrapHandlerError(async function handler(
   req:  NextApiRequest,
@@ -47,7 +45,7 @@ export default wrapHandlerError(async function handler(
         return res.status(400).json(validateResult)
       }
 
-      let keypair =  await BigchainInstance.generateKeyPairFormPassphrase(passphrase);
+      let keypair =  await BigchainInstance.getDefaultKeyPair();
       
       let assetBigchain = await BigchainInstance.createAsset({
         o2Thank:{
@@ -58,7 +56,10 @@ export default wrapHandlerError(async function handler(
         ...asset.metadata,
         warehouse:{
           ...warehouse,
-          user:user
+          user:{
+            _id:user._id,
+            fullname:user.fullname
+          }
         },
         time: new Date().toISOString()
       }, keypair);

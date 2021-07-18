@@ -4,7 +4,7 @@ import { ResponseError } from './error';
 import {DbConnection} from '@/util/database'
 import { ObjectId } from 'mongodb';
 
-const secret ='rahasia';
+const secret = process.env.JWT_SECRET || 'rahasia'
 
 export function jwtSign(payload:object):string{
   return sign(payload, secret,{ expiresIn: '1h' });

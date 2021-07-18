@@ -15,9 +15,6 @@ type Response = {
   message: string
 }
 
-const passphrase = 'This is a random passphrase'
-
-
 export default wrapHandlerError(async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response|ValidationError[]>
@@ -49,7 +46,7 @@ export default wrapHandlerError(async function handler(
         return res.status(400).json(validateResult)
       }
 
-      let keypair =  await BigchainInstance.generateKeyPairFormPassphrase(passphrase);
+      let keypair =  await BigchainInstance.getDefaultKeyPair();
 
       let transactions = await BigchainInstance.getTransactions(assets!.assetId as string)
       
@@ -58,7 +55,10 @@ export default wrapHandlerError(async function handler(
         user:user._id,
         warehouse:{
           ...warehouse,
-          user:user
+          user:{
+            _id:user._id,
+            fullname:user.fullname
+          }
         },
         time: new Date().toISOString()
       },keypair)

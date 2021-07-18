@@ -46,8 +46,15 @@ export default wrapHandlerError(async function handler(
         return res.status(400).json(validateResult)
       }
 
+      // search asssets on offchain
       let assets =  await db.collection("assets").findOne({serialNumber:asset.serialNumber})
       if(assets){
+        throw new ResponseError('serial number already exist',400);
+      }
+      
+      // search asssets on blockhcian/onchain
+      let assestBigchain = await BigchainInstance.searchAssets(asset.serialNumber);
+      if(assestBigchain.length>0){
         throw new ResponseError('serial number already exist',400);
       }
 

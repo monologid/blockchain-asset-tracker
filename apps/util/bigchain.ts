@@ -89,6 +89,10 @@ class Bigchain{
         return this.conn.getTransaction(transactionId)
     }
 
+    searchAssets(name:string):Promise<EndpointsResponse[Endpoints.assets]>{
+        return this.conn.searchAssets(name)
+    }
+
 }
 
 export const BigchainInstance = Bigchain.instance;

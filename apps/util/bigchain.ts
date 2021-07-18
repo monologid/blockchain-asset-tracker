@@ -7,6 +7,7 @@ import type {
 import * as bip39 from 'bip39'
 
 const conn_uri = process.env.BIGCHAINDB_URI || 'http://bigchaindb:9984/api/v1/'
+const passphrase = process.env.PASSPHRASE || 'This is a random passphrase'
 
 class Bigchain{
     private conn:Connection;

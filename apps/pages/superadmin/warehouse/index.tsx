@@ -56,7 +56,7 @@ export default function SuperadminWarehousePage() {
             </div>
           </div>
           {warehouses.map((item: any, i: number) => (
-            <Link key={i} href={`/superadmin/warehouse/${item.id}/detail`}>
+            <Link key={i} href={`/superadmin/warehouse/${item._id}/detail`}>
               <div className={`border rounded p-5 mb-5 cursor-pointer`}>
                 <div><i className={`fa fa-desktop text-primary`} /></div>
                 <div className={`text-primary font-bold text-lg mb-2`}>{item.name}</div>

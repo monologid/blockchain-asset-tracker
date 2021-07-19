@@ -53,11 +53,16 @@ export default wrapHandlerError(async function handler(
         throw new ResponseError('serial number already exist - offchain',400);
       }
       
-      // search asssets on blockhcian/onchain
-      // let assestBigchain = await BigchainInstance.searchAssets(asset.serialNumber);
-      // if(assestBigchain.length>0 && assestBigchain[0]?.data?.tank?.serialNumber == asset.serialNumber){
-      //   throw new ResponseError('serial number already exist - onchain',400);
-      // }
+      //search asssets on blockhcian/onchain
+      let assestBigchain = await BigchainInstance.searchAssets(asset.serialNumber);
+      if(assestBigchain.length>0){
+          // filter by exact match, because on bigchain search by text search
+          // http://docs.bigchaindb.com/projects/js-driver/en/latest/usage.html#querying-for-assets
+          let filtered = assestBigchain.filter(item => item.data.tank?.serialNumber === asset.serialNumber);
+          if(filtered.length>0){
+            throw new ResponseError('serial number already exist - onchain',400);
+          }
+      }
 
       let keypair =  await BigchainInstance.getDefaultKeyPair();
       

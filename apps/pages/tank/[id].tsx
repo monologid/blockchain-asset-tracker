@@ -39,6 +39,7 @@ export default function TankDetail({ id, isUser }: any) {
             <div className={`mb-2`}><i className={`fa fa-ship`} /></div>
             <div className={`text-white font-bold text-xl`}>{tank.serialNumber}</div>
             <div className={`text-white text-md`}>{tank.manufacturer}</div>
+            <div className={`text-white text-md`}>{tank.assetId}</div>
           </div>
           <div>
             <div className={`mb-5 font-bold text-primary text-xl`}>History</div>
@@ -56,6 +57,10 @@ export default function TankDetail({ id, isUser }: any) {
                         <div className={`col-span-1`}><i className={`fa fa-calendar`} /></div>
                         <div className={`col-span-11`}>{moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')}</div>
                       </div>
+                      <div className={`grid grid-cols-12`}>
+                        <div className={`col-span-1`}><i className={`fa fa-link`} /></div>
+                        <div className={`col-span-11`}>{item.id}</div>
+                      </div>
                     </>
                   ):(
                     <>
@@ -71,6 +76,10 @@ export default function TankDetail({ id, isUser }: any) {
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-calendar`} /></div>
                         <div className={`col-span-11`}>{moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')}</div>
+                      </div>
+                      <div className={`grid grid-cols-12`}>
+                        <div className={`col-span-1`}><i className={`fa fa-link`} /></div>
+                        <div className={`col-span-11`}>{item.id}</div>
                       </div>
                     </>
                   )}

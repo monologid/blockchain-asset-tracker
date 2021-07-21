@@ -1,10 +1,6 @@
 # blockchain-asset-tracker
 Asset tracker using  BigchainDB
 
-#### Login
-- Login using Google
-- Login using Facebook
-
 ### Getting Started
 
 install dependencies and rename the env local example:

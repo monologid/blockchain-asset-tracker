@@ -42,8 +42,8 @@ Reference for color branding [Green](https://colorhunt.co/palette/2f5d625e8b7ea7
 | Warehouse | Superadmin - Create user in warehouse detail | Done |
 
 ### Application Architecture
-![Image](./images/architecture-1.png?raw=true)
-![Image](./images/architecture-2.png?raw=true)
+![Image](./images/architecture-01.png?raw=true)
+![Image](./images/architecture-02.png?raw=true)
 
 ### Example Blokchain Data
 ![Image](./images/blockchain-data.png?raw=true)

@@ -46,4 +46,4 @@ Reference for color branding [Green](https://colorhunt.co/palette/2f5d625e8b7ea7
 ![Image](./images/architecture-2.png?raw=true)
 
 ### Example Blokchain Data
-![Image](./images/blokchain-data.png?raw=true)
+![Image](./images/blockchain-data.png?raw=true)

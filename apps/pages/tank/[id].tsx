@@ -31,6 +31,10 @@ export default function TankDetail({ id, isUser }: any) {
     getAssetDetail(id).then(null)
   }, [])
 
+  const getColor = (status: string) => {
+    return (status.toLowerCase() === 'in') ? 'text-green-500' : 'text-red-500'
+  }
+
   return (
     <MainLayout title={`Tank Detail`} isLoading={isPageLoading} isUser={isUser}>
       {tank && tank._id &&
@@ -39,7 +43,8 @@ export default function TankDetail({ id, isUser }: any) {
             <div className={`mb-2`}><i className={`fa fa-ship`} /></div>
             <div className={`text-white font-bold text-xl`}>{tank.serialNumber}</div>
             <div className={`text-white text-md`}>{tank.manufacturer}</div>
-            <div className={`text-white text-md`}>{tank.assetId}</div>
+            <div className={`text-white text-md break-words mt-5 font-bold`}>Blockchain ID</div>
+            <div className={`text-white text-md break-words`}>{tank.assetId}</div>
           </div>
           <div>
             <div className={`mb-5 font-bold text-primary text-xl`}>History</div>
@@ -65,6 +70,10 @@ export default function TankDetail({ id, isUser }: any) {
                   ):(
                     <>
                       <div className={`font-bold`}>{item.status}</div>
+                      <div className={`grid grid-cols-12`}>
+                        <div className={`col-span-1`}><i className={`fa fa-heartbeat`} /></div>
+                        <div className={`col-span-11 font-bold ${getColor(item.metadata.status)}`}>{item.metadata.status}</div>
+                      </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-map-marker`} /></div>
                         <div className={`col-span-11 font-bold`}>{item.metadata.warehouse.name}</div>

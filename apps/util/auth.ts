@@ -51,16 +51,13 @@ export async function authMiddleware (req: NextApiRequest, res: NextApiResponse<
       (req as NextApiAuthRequest).isAdmin = isAdmin;
       (req as NextApiAuthRequest).warehouse = warehouse;
     }
-  
   } catch(err) {
     throw new ResponseError(err.message||err,401); 
   }
-
 }
 
 export interface NextApiAuthRequest extends NextApiRequest{
   user: any;
   warehouse: any;
   isAdmin:boolean;
-
 }

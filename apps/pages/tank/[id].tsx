@@ -59,15 +59,17 @@ export default function TankDetail({ id, isUser }: any) {
             <div className={`text-white text-md`}>{tank.manufacturer}</div>
             <div className={`text-white text-md break-words mt-5 font-bold`}>Blockchain ID</div>
             <div className={`text-white text-md break-words`}>{tank.assetId}</div>
+            <div className={`text-white text-md break-words mt-5 font-bold`}>Remaining Volume</div>
+            <div className={`text-white text-md break-words`}>{(totalIn-totalOut).toLocaleString()} ton</div>
           </div>
 
           <div className={`my-5 grid grid-cols-2 gap-5`}>
             <div className={`border rounded p-3`}>
-              <div className={`text-xs uppercase mb-5`}>Total IN</div>
+              <div className={`text-xs uppercase mb-5`}>Total Volume IN</div>
               <div className={`text-primary text-right text-lg font-bold`}>{totalIn.toLocaleString()}</div>
             </div>
             <div className={`border rounded p-3`}>
-              <div className={`text-xs uppercase mb-5`}>Total OUT</div>
+              <div className={`text-xs uppercase mb-5`}>Total Volume OUT</div>
               <div className={`text-primary text-right text-lg font-bold`}>{totalOut.toLocaleString()}</div>
             </div>
           </div>

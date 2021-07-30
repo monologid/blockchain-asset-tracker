@@ -18,7 +18,7 @@ export default wrapHandlerError(async function handler(
 
   let assets =  await db.collection("assets").findOne({_id:new ObjectId(id as string)})
   if(!assets){
-    res.status(200).json({})
+    return res.status(200).json({})
   }
 
   let transactions = await BigchainInstance.getTransactions(assets!.assetId as string)

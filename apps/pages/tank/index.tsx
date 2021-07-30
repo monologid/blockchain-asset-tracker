@@ -59,7 +59,7 @@ export default function Dashboard({ isUser }: any) {
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const cookies = parseCookies(ctx)
-  
+
   return {
     props: {
       isUser: cookies!.user_token ? true : false

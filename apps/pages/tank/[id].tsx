@@ -106,7 +106,7 @@ export default function TankDetail({ id, isUser }: any) {
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-battery-three-quarters`} /></div>
-                        <div className={`col-span-11`}>{item.metadata.volume} ml</div>
+                        <div className={`col-span-11`}>{item.metadata.volume} ton</div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-calendar`} /></div>

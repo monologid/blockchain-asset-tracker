@@ -65,11 +65,11 @@ export default function TankDetail({ id, isUser }: any) {
 
           <div className={`my-5 grid grid-cols-2 gap-5`}>
             <div className={`border rounded p-3`}>
-              <div className={`text-xs uppercase mb-5`}>Total Volume IN</div>
+              <div className={`text-xs uppercase mb-5`}>Total Volume - IN</div>
               <div className={`text-primary text-right text-lg font-bold`}>{totalIn.toLocaleString()}</div>
             </div>
             <div className={`border rounded p-3`}>
-              <div className={`text-xs uppercase mb-5`}>Total Volume OUT</div>
+              <div className={`text-xs uppercase mb-5`}>Total Volume - OUT</div>
               <div className={`text-primary text-right text-lg font-bold`}>{totalOut.toLocaleString()}</div>
             </div>
           </div>
@@ -88,7 +88,11 @@ export default function TankDetail({ id, isUser }: any) {
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-calendar`} /></div>
-                        <div className={`col-span-11`}>{moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')}</div>
+                        <div className={`col-span-11`}>
+                          { item.metadata!.time ? (
+                            moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')
+                          ):('N/A')}
+                        </div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-link`} /></div>
@@ -100,23 +104,31 @@ export default function TankDetail({ id, isUser }: any) {
                       <div className={`font-bold`}>{item.status}</div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-heartbeat`} /></div>
-                        <div className={`col-span-11 font-bold ${getColor(item.metadata.status)}`}>{item.metadata.status}</div>
+                        <div className={`col-span-11 font-bold ${getColor(item.metadata!.status)}`}>{item.metadata!.status || 'N/A'}</div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-map-marker`} /></div>
-                        <div className={`col-span-11 font-bold`}>{item.metadata.warehouse.name}</div>
+                        <div className={`col-span-11 font-bold`}>{item.metadata!.warehouse!.name || 'N/A'}</div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-battery-three-quarters`} /></div>
-                        <div className={`col-span-11`}>{item.metadata.volume} ton</div>
+                        <div className={`col-span-11`}>{item.metadata!.volume || 0} ton</div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-calendar`} /></div>
-                        <div className={`col-span-11`}>{moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')}</div>
+                        <div className={`col-span-11`}>
+                          { item.metadata!.time ? (
+                            moment(item.metadata.time).format('YYYY-MM-DD HH:mm:ss')
+                          ):('N/A')}
+                        </div>
                       </div>
                       <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-link`} /></div>
                         <div className={`col-span-11`}>{item.id}</div>
+                      </div>
+                      <div className={`grid grid-cols-12`}>
+                        <div className={`col-span-1`}><i className={`fa fa-user`} /></div>
+                        <div className={`col-span-11`}>{item.metadata!.warehouse!.user!.fullname || 'N/A'}</div>
                       </div>
                     </>
                   )}

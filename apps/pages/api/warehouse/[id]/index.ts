@@ -19,6 +19,15 @@ export default wrapHandlerError(async function handler(
   switch (req.method) {
     case "GET":
       let result =  await db.collection("warehouses").findOne({_id:new ObjectId(id as string)}) || {}
+      
+      let summary = db.collection("warehouse_history").aggregate([
+        { $match: { warehouseId: new ObjectId(id as string) }  },
+        { $group: {
+          _id: "$status",
+          totalVolume: { $sum: "$volume" }
+        }}
+      ])
+      console.log({summary})
       res.status(200).json(result)
       break;
     default:

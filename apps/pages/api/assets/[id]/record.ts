@@ -56,7 +56,7 @@ export default wrapHandlerError(async function handler(
 
       let transactions = await BigchainInstance.getTransactions(assets!.assetId as string)
       
-      await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],{
+      let tx =  await BigchainInstance.updateAssetRecord(transactions[transactions.length-1],{
         ...data.metadata,
         warehouse:{
           ...warehouse,
@@ -68,6 +68,16 @@ export default wrapHandlerError(async function handler(
         time: new Date().toISOString()
       },keypair)
       
+      await db.collection("warehouse_history").insertOne({
+        warehouseId:warehouse._id,
+        assetName: assets!.name,
+        status: data.metadata.status, 
+        volume: data.metadata.volume ,
+        createdAt:new Date(),
+        assetId: assets!.assetId,
+        trxId:tx.id    
+      });
+
       res.status(200).json({ message: "record updated" })
       break;
     default:

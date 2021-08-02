@@ -20,15 +20,16 @@ export default wrapHandlerError(async function handler(
     case "GET":
       let result =  await db.collection("warehouses").findOne({_id:new ObjectId(id as string)}) || {}
       
-      let summary = db.collection("warehouse_history").aggregate([
+      let summary = await db.collection("warehouse_history").aggregate([
         { $match: { warehouseId: new ObjectId(id as string) }  },
         { $group: {
           _id: "$status",
           totalVolume: { $sum: "$volume" }
         }}
-      ])
-      console.log({summary})
-      res.status(200).json(result)
+      ]).toArray();
+      res.status(200).json({
+        ...result,
+        summary})
       break;
     default:
       res.status(404).json({ message: "Request HTTP Method Incorrect." })

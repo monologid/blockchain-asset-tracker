@@ -21,11 +21,21 @@ export default wrapHandlerError(async function handler(
     return res.status(200).json({})
   }
 
+  let summary = await db.collection("warehouse_history").aggregate([
+    { $match: { assetId: assets!.assetId }  },
+    { $group: {
+      _id: "$status",
+      totalVolume: { $sum: "$volume" }
+    }}
+  ]).toArray();
+
+
   let transactions = await BigchainInstance.getTransactions(assets!.assetId as string)
   
   res.status(200).json({
     assets:assets,
-    transactions:transactions
+    transactions:transactions,
+    summary:summary
   })
 
 });

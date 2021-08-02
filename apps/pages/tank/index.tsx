@@ -12,7 +12,7 @@ export default function Dashboard({ isUser }: any) {
   const api = new Api({ baseUrl: constant.BaseApiUrl })
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false)
   const [assets, setAssets] = useState<any>([])
-  
+
   const getAssets = async () => {
     try {
       setIsPageLoading(true)
@@ -59,7 +59,7 @@ export default function Dashboard({ isUser }: any) {
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const cookies = parseCookies(ctx)
-  
+
   return {
     props: {
       isUser: cookies!.user_token ? true : false

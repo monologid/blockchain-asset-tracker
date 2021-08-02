@@ -11,9 +11,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     setCookie({ res }, 'user_token', '', opts)
     destroyCookie({ res }, 'superadmin_token', {})
     destroyCookie({ res }, 'user_token', {})
-    console.dir('ok')
   } catch (e) {
-    console.dir('not ok')
     console.dir(e)
   }
 

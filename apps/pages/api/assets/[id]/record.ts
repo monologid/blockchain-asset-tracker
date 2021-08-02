@@ -68,7 +68,7 @@ export default wrapHandlerError(async function handler(
         time: new Date().toISOString()
       },keypair)
       
-      await db.collection("warehouse_history").insertOne({
+      await db.collection("warehouse_trx_history").insertOne({
         warehouseId:warehouse._id,
         assetName: assets!.name,
         status: data.metadata.status, 

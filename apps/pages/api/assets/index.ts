@@ -34,7 +34,7 @@ export default wrapHandlerError(async function handler(
       const warehouse =  (req as NextApiAuthRequest).warehouse;
     
       const schema = {
-        serialNumber: { type: "string", min: 3, max: 100 },
+        serialNumber: { type: "string", min: 3, max: 100, alphadash: true },
         manufacturer: { type: "string", min: 3, max: 100 },
         metadata: "object", 
       };

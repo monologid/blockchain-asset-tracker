@@ -21,7 +21,7 @@ export default wrapHandlerError(async function handler(
     return res.status(200).json({})
   }
 
-  let summary = await db.collection("warehouse_history").aggregate([
+  let summary = await db.collection("warehouse_trx_history").aggregate([
     { $match: { assetId: assets!.assetId }  },
     { $group: {
       _id: "$status",

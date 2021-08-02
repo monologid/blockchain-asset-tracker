@@ -20,7 +20,7 @@ export default wrapHandlerError(async function handler(
     case "GET":
       let result =  await db.collection("warehouses").findOne({_id:new ObjectId(id as string)}) || {}
       
-      let summary = await db.collection("warehouse_history").aggregate([
+      let summary = await db.collection("warehouse_trx_history").aggregate([
         { $match: { warehouseId: new ObjectId(id as string) }  },
         { $group: {
           _id: "$status",

@@ -1,7 +1,7 @@
 import constant from "@/common/constant";
 import { ButtonPrimaryLink } from "@/components/button";
 import SvgImage from "@/components/svg";
-import { Modal } from "antd";
+import { Modal, Table } from "antd";
 import { Api } from "clients/api-client";
 import { NextPageContext } from "next";
 import Link from "next/link";
@@ -54,18 +54,22 @@ export default function SuperadminWarehousePage() {
             </div>
             <div className={`space-x-3`}>
               <ButtonPrimaryLink title={`+ Create`} href={`/superadmin/warehouse/create`} />
-              <ButtonPrimaryLink title={`Report`} href={`/superadmin/warehouse/report`} />
             </div>
           </div>
-          {warehouses.map((item: any, i: number) => (
-            <Link key={i} href={`/superadmin/warehouse/${item._id}/detail`}>
-              <div className={`border rounded p-5 mb-5 cursor-pointer`}>
-                <div><i className={`fa fa-desktop text-primary`} /></div>
-                <div className={`text-primary font-bold text-lg mb-2`}>{item.name}</div>
-                <div className={`text-sm text-gray-500`}>{item.description}</div>
-              </div>
-            </Link>
-          ))}
+
+          {warehouses.length > 0 &&
+            <Table dataSource={warehouses} columns={[
+              { dataIndex: 'name', title: 'Name' },
+              { dataIndex: 'summary', title: 'Total Volume IN', render: item => item.totalIn },
+              { dataIndex: 'summary', title: 'Total Volume OUT', render: item => item.totalOut },
+              { dataIndex: '_id', render: item => (
+                <div className={`space-x-3`}>
+                  <ButtonPrimaryLink title={`View`} href={`/superadmin/warehouse/${item}/detail`} />
+                  <ButtonPrimaryLink title={`Report`} href={`/superadmin/warehouse/${item}/report`} />
+                </div>
+              ) },
+            ]} />
+          }
         </div>
       }
     </LayoutSuperAdmin>

@@ -49,23 +49,29 @@ export default wrapHandlerError(async function handler(
       res.status(200).json({ message: 'success create warehouse '})
       break;
     case "GET":
-      let results =  await db.collection("warehouses").find({}).toArray()
-      let summaries = await db.collection("warehouse_trx_history").aggregate([
-        { $group: {
-          _id: {
-            warehouseId:"$warehouseId",
-            status:"$status"
-          },
-          totalVolume: { $sum: "$volume" }
-        }}
+      let results: any = await db.collection("warehouses").aggregate([
+        {
+          $lookup: {
+            from: "warehouse_trx_history",
+            localField: "_id",
+            foreignField: "warehouseId",
+            as: "warehouse_trx_history"
+          }
+        }
       ]).toArray();
-      results.map(item=>{
-        let summary = summaries.filter( (e)=> {
-          return e._id.warehouseId =item._id;
-        });
-        item['summary']=summary;
+
+      results.map((item: any) => {
+        let totalIn: number = 0
+        let totalOut: number = 0
+        item.warehouse_trx_history.forEach((trx: any) => {
+          if (trx.status == 'IN') totalIn = totalIn + trx.volume
+          if (trx.status == 'OUT') totalOut = totalOut + trx.volume
+        })
+
+        item.summary = {
+          totalIn, totalOut
+        }
       })
-  
 
       res.status(200).json(results)
       break;

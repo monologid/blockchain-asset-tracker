@@ -60,9 +60,9 @@ export default function SuperadminWarehousePage() {
           {warehouses.length > 0 &&
             <Table dataSource={warehouses} columns={[
               { dataIndex: 'name', title: 'Name' },
-              { dataIndex: 'summary', title: 'Total Volume IN', render: item => item.totalIn },
-              { dataIndex: 'summary', title: 'Total Volume OUT', render: item => item.totalOut },
-              { dataIndex: '_id', render: item => (
+              { dataIndex: 'summary', title: 'Total Volume IN', render: (item: any) => item.totalIn },
+              { dataIndex: 'summary', title: 'Total Volume OUT', render: (item: any) => item.totalOut },
+              { dataIndex: '_id', render: (item: any) => (
                 <div className={`space-x-3`}>
                   <ButtonPrimaryLink title={`View`} href={`/superadmin/warehouse/${item}/detail`} />
                   <ButtonPrimaryLink title={`Report`} href={`/superadmin/warehouse/${item}/report`} />

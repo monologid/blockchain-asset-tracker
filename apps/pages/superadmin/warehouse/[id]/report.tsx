@@ -51,10 +51,10 @@ export default function WarehouseReport({ id }: any) {
 
       {history.length > 0 &&
         <Table dataSource={history} columns={[
-          { dataIndex: 'asset', title: 'Asset Serial Number', render: item => <>{item[0].serialNumber || 'N/A'}</> },
-          { dataIndex: 'status', title: 'Status', render: item => (item.toLowerCase() === 'out') ? <span className={`text-red-500 font-bold`}>{item}</span> : <span className={`text-green-600 font-bold`}>{item}</span> },
-          { dataIndex: 'volume', title: 'Volume' },
-          { dataIndex: 'createdAt', title: 'Created At', render: item => moment(item).format('DD-MM-YYYY HH:mm:ss') }
+          { key: 'asset', dataIndex: 'asset', title: 'Asset Serial Number', render: (item: any) => <>{item[0].serialNumber || 'N/A'}</> },
+          { key: 'status', dataIndex: 'status', title: 'Status', render: (item: any) => (item.toLowerCase() === 'out') ? <span className={`text-red-500 font-bold`}>{item}</span> : <span className={`text-green-600 font-bold`}>{item}</span> },
+          { key: 'volume', dataIndex: 'volume', title: 'Volume' },
+          { key: 'createdAt', dataIndex: 'createdAt', title: 'Created At', render: (item: any) => moment(item).format('DD-MM-YYYY HH:mm:ss') }
         ]} />
       }
     </LayoutSuperAdmin>

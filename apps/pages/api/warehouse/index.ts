@@ -50,6 +50,23 @@ export default wrapHandlerError(async function handler(
       break;
     case "GET":
       let results =  await db.collection("warehouses").find({}).toArray()
+      let summaries = await db.collection("warehouse_trx_history").aggregate([
+        { $group: {
+          _id: {
+            warehouseId:"$warehouseId",
+            status:"$status"
+          },
+          totalVolume: { $sum: "$volume" }
+        }}
+      ]).toArray();
+      results.map(item=>{
+        let summary = summaries.filter( (e)=> {
+          return e._id.warehouseId =item._id;
+        });
+        item['summary']=summary;
+      })
+  
+
       res.status(200).json(results)
       break;
     default:

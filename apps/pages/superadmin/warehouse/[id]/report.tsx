@@ -51,10 +51,16 @@ export default function WarehouseReport({ id }: any) {
 
       {history.length > 0 &&
         <Table dataSource={history} columns={[
-          { key: 'asset', dataIndex: 'asset', title: 'Asset Serial Number', render: (item: any) => <>{item[0].serialNumber || 'N/A'}</> },
-          { key: 'status', dataIndex: 'status', title: 'Status', render: (item: any) => (item.toLowerCase() === 'out') ? <span className={`text-red-500 font-bold`}>{item}</span> : <span className={`text-green-600 font-bold`}>{item}</span> },
+          { key: 'asset', dataIndex: 'asset', title: 'Asset Serial Number', 
+          // eslint-disable-next-line react/display-name
+          render: (item: any) => <>{item[0].serialNumber || 'N/A'}</> },
+          { key: 'status', dataIndex: 'status', title: 'Status', 
+          // eslint-disable-next-line react/display-name
+          render: (item: any) => (item.toLowerCase() === 'out') ? <span className={`text-red-500 font-bold`}>{item}</span> : <span className={`text-green-600 font-bold`}>{item}</span> },
           { key: 'volume', dataIndex: 'volume', title: 'Volume' },
-          { key: 'createdAt', dataIndex: 'createdAt', title: 'Created At', render: (item: any) => moment(item).format('DD-MM-YYYY HH:mm:ss') }
+          { key: 'createdAt', dataIndex: 'createdAt', title: 'Created At', 
+          // eslint-disable-next-line react/display-name
+          render: (item: any) => moment(item).format('DD-MM-YYYY HH:mm:ss') }
         ]} />
       }
     </LayoutSuperAdmin>

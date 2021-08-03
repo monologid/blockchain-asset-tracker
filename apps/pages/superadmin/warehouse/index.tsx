@@ -52,8 +52,9 @@ export default function SuperadminWarehousePage() {
               <div className={`font-bold text-primary text-xl mb-1`}>Warehouses</div>
               <div className={`text-gray-400 mb-7`}>List of registered warehouses</div>
             </div>
-            <div>
+            <div className={`space-x-3`}>
               <ButtonPrimaryLink title={`+ Create`} href={`/superadmin/warehouse/create`} />
+              <ButtonPrimaryLink title={`Report`} href={`/superadmin/warehouse/report`} />
             </div>
           </div>
           {warehouses.map((item: any, i: number) => (

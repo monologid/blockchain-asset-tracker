@@ -27,9 +27,23 @@ export default wrapHandlerError(async function handler(
           totalVolume: { $sum: "$volume" }
         }}
       ]).toArray();
+
+      let history = await db.collection("warehouse_trx_history").aggregate([
+        { $match: { warehouseId: new ObjectId(id as string) }  },
+        {
+          $lookup: {
+            from: "assets",
+            localField: "assetId",
+            foreignField: "assetId",
+            as: "asset"
+          }
+        }
+      ]).toArray();
       res.status(200).json({
         ...result,
-        summary})
+        summary,
+        history
+      })
       break;
     default:
       res.status(404).json({ message: "Request HTTP Method Incorrect." })

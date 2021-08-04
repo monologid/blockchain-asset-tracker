@@ -107,6 +107,10 @@ export default function TankDetail({ id, isUser }: any) {
                         <div className={`col-span-11 font-bold ${getColor(item.metadata!.status)}`}>{item.metadata!.status || 'N/A'}</div>
                       </div>
                       <div className={`grid grid-cols-12`}>
+                        <div className={`col-span-1`}><i className={`fa fa-flag-checkered`} /></div>
+                        <div className={`col-span-11 font-bold text-primary`}>{item.metadata!.flag || 'N/A'}</div>
+                      </div>
+                      <div className={`grid grid-cols-12`}>
                         <div className={`col-span-1`}><i className={`fa fa-map-marker`} /></div>
                         <div className={`col-span-11 font-bold`}>{item.metadata!.warehouse!.name || 'N/A'}</div>
                       </div>

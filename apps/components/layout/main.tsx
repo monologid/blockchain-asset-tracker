@@ -37,13 +37,13 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
   }
 
   const onFinishFormAsset = async (values: any) => {
-    const { status, volume } = values
+    const { status, volume, flag } = values
     setIsShowModalAssetRecord(false)
     setIsPageLoading(true)
     
     try {
       const api = new Api({ baseUrl: constant.BaseApiUrl })
-      await api.assets.recordCreate(values.asset, { metadata: { status, volume } })
+      await api.assets.recordCreate(values.asset, { metadata: { status, volume, flag } })
       window.location.reload()
     } catch (e) {
       Modal.error({ title: 'Error', content: `Failed to submit new record for asset ${values.asset}` })
@@ -97,8 +97,8 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
         </div>
       </Drawer>
 
-      <Modal visible={isShowModalAssetRecord} onCancel={e => setIsShowModalAssetRecord(false)} footer={null}>
-        <Form form={formAsset} onFinish={onFinishFormAsset}>
+      <Modal title={`Scan Asset`} visible={isShowModalAssetRecord} onCancel={e => setIsShowModalAssetRecord(false)} footer={null}>
+        <Form form={formAsset} onFinish={onFinishFormAsset} layout={`vertical`}>
           <Form.Item label={`Asset`} name={`asset`} required>
             <Input disabled />
           </Form.Item>
@@ -107,6 +107,14 @@ const MainLayout: FC<IMainLayoutProps> = ({ title, isLoading = false, isUser = f
             <Select>
               <Select.Option value={`IN`}>IN</Select.Option>
               <Select.Option value={`OUT`}>OUT</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label={`Flag`} name={`flag`} required>
+            <Select>
+              {['READY', 'IN-TRANSIT', 'TO BE REPAIRED', 'TO BE REFILLED', 'INACTIVE'].map((item: string, i: number) => (
+                <Select.Option key={i} value={item}>{item}</Select.Option>
+              ))}
             </Select>
           </Form.Item>
 
